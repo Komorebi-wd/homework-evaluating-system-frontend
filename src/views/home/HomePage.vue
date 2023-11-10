@@ -17,9 +17,11 @@
             同学你好，新的一天也要加油哦！
           </el-col>
           <el-carousel :interval="4000" type="card" height="300px" >
-            <el-carousel-item v-for="item in 4" :key="item">
-              <h3 text="2xl" justify="center">{{ item }}</h3>
+
+            <el-carousel-item v-for="item in homes" :key="item">
+              <el-image :src="item.url"></el-image>
             </el-carousel-item>
+
           </el-carousel>
 
         <div style="margin-top: 30px">
@@ -32,9 +34,13 @@
                 <el-button class="button" text>前往</el-button>
               </div>
             </template>
-            <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+             <div>
+               在课程平台，你可以查看自己的所有课程，以及对应课程是否有作业需要完成。
+             </div>
           </el-card>
             </el-col>
+
+
             <el-col span="4" >
           <el-card class="box-card" style="margin-left: 60px">
             <template #header>
@@ -43,9 +49,13 @@
                 <el-button class="button" text>前往</el-button>
               </div>
             </template>
-            <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+            <div>
+              在作业平台，你可以查看自己对应课程的所有作业，并选择下载作业或者提交作业。
+            </div>
           </el-card>
             </el-col>
+
+
             <el-col span="4">
           <el-card class="box-card" style="margin-left: 60px">
             <template #header>
@@ -54,9 +64,13 @@
                 <el-button class="button" text>前往</el-button>
               </div>
             </template>
-            <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+            <div>
+              在批改平台，你可以查看自己待批改的所有作业，并选择进行批改操作。
+            </div>
           </el-card>
             </el-col>
+
+
           </el-row>
         </div>
 
@@ -81,6 +95,14 @@ const buttons = [
   { type: 'primary', text: 'primary' },
   { type: 'info', text: 'info' },
 ] as const
+const homes=[
+  {url:'src/resources/home1.png', text:'Image 1'},
+  {url:'src/resources/home2.png', text:'Image 2'},
+  {url:'src/resources/home3.png', text:'Image 3'},
+  {url:'src/resources/home4.png', text:'Image 4'},
+]
+
+
 </script>
 
 <style scoped>
@@ -115,6 +137,8 @@ const buttons = [
 
 .box-card {
   width: 370px;
+  height: 260px;
+  background-color: lightgoldenrodyellow;
 }
 </style>
 

@@ -13,64 +13,9 @@
         <el-main style="display: flex">
 
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              数据库系统原理
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              人工智能基础
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              大数据概论
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              操作系统
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              机器学习
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              计算机网络
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              科技论文写作
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              专业课程实训
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              微积分
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              线性代数
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              概率论与数理统计
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              计算机组成原理
+            <div class="scrollbar-demo-item" v-for="item in classes">
+              <el-icon><Document /></el-icon>
+              {{item}}
               <el-button type="primary" style="margin-left: auto">前往作业</el-button>
             </div>
 
@@ -87,9 +32,11 @@
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import { ref } from 'vue'
-import {ChatLineSquare} from "@element-plus/icons-vue";
+import {ChatLineSquare, Document} from "@element-plus/icons-vue";
 const count = ref(15)
-
+const classes=[
+    '数据库系统原理','人工智能基础','大数据概论','操作系统','机器学习','计算机网络','科技论文写作','专业课程实训','微积分','线性代数','概率论与数理统计','计算机组成原理'
+]
 
 </script>
 
@@ -113,4 +60,9 @@ const count = ref(15)
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 </style>
+
+
+
+
+
 
