@@ -23,12 +23,29 @@ const router = createRouter({
                     component: () => import('@/views/welcome/ForgetPage.vue')
                 }
             ]
-        }, {
+        },
+        {
             path: '/index',
             name: 'index',
             component: () => import('@/views/IndexView.vue'),
-        }
+        },
+        {
+            path: '/home',
+            name: 'welcome-home',
+            component: () => import('@/views/home/HomePage.vue')
+         },
+        {
+            path: '/homework',
+            name: 'home-homework',
+            component: () => import('@/views/home/HomeworkPage.vue')
+        },
+        {
+            path: '/work',
+            name: 'home-work',
+            component: () => import('@/views/home/WorkPage.vue')
+        },
     ]
+
 })
 
 router.beforeEach((to, from, next) => {
@@ -41,5 +58,6 @@ router.beforeEach((to, from, next) => {
         next()
     }
 })
+
 
 export default router
