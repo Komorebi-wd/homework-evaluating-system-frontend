@@ -2,7 +2,7 @@
     <div style="width: 100vw;height: 100vh;overflow: hidden;display: flex">
         <div style="flex: 1">
             <el-image style="width: 100%;height: 100%" fit="cover"
-                      src="https://www.cacos.com/uploadfile/2019/0515/20190515112852500.jpg"/>
+                      src="src/resources/home.png"/>
         </div>
         <div class="welcome-title">
             <div style="font-size: 30px;font-weight: bold">欢迎使用学生作业互评平台</div>
