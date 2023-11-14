@@ -3,6 +3,7 @@
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {ChatLineSquare} from "@element-plus/icons-vue";
+
 </script>
 
 <template>

@@ -44,6 +44,16 @@ const router = createRouter({
             name: 'home-work',
             component: () => import('@/views/home/WorkPage.vue')
         },
+        {
+            path: '/evaluateHomework',
+            name: 'evaluate-evaluateHomework',
+            component: () => import('@/views/evaluate/EvaluateHomework.vue')
+        },
+        {
+            path: '/evaluate',
+            name: 'evaluate-evaluate',
+            component: () => import('@/views/evaluate/Evaluate.vue')
+        }
     ]
 
 })
