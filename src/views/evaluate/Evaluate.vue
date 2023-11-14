@@ -42,15 +42,26 @@ const submit = () => {
 
         <div class="content-container" >
           <!-- 新增的显示作业信息的组件 -->
-          <div class="homework-info-display">
-            <span>来自{{ homeworkInfo.studentName }}的{{ homeworkInfo.course }}作业</span>
-          </div>
-          <div class="homework-display">
-            <!-- 在线展示作业内容的区域 -->
-            <span v-if="fileUrl">
+<!--          <div class="homework-info-display">-->
+
+<!--          </div>-->
+          <el-col span="4" >
+            <el-card class="box-card" style="margin-left: 60px">
+              <template #header>
+                <div class="card-header">
+                  <span>来自{{ homeworkInfo.studentName }}的{{ homeworkInfo.course }}作业</span>
+<!--                  <el-button class="button" text>前往</el-button>-->
+                </div>
+              </template>
+              <div class="homework-display">
+                <!-- 在线展示作业内容的区域 -->
+                <span v-if="fileUrl">
               <a :href="fileUrl" download>点击下载作业</a>
             </span>
-          </div>
+              </div>
+            </el-card>
+          </el-col>
+
 
           <div class="score-comment-container vertical-section">
             <div class="score-section ">
@@ -84,7 +95,7 @@ const submit = () => {
 .content-container{
   margin-left: auto;
   margin-right: auto;
-  margin-top: 50px;
+  margin-top: 30px;
 
 }
 .homework-info-display {
@@ -106,6 +117,7 @@ const submit = () => {
   width: 10%; /* 每个按钮宽度设置为父元素的10%，确保填满整个按钮组 */
 }
 .score-section, .comment-section {
+  margin-top: 10px;
   width: 330px;
 }
 
