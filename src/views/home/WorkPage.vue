@@ -2,7 +2,8 @@
 
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
-import {ChatLineSquare} from "@element-plus/icons-vue";
+import {Document} from "@element-plus/icons-vue";
+const works=['作业一','作业二','作业三','作业四','作业五','作业六','作业七']
 </script>
 
 <template>
@@ -20,45 +21,9 @@ import {ChatLineSquare} from "@element-plus/icons-vue";
 
         <el-main style="display:flex">
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              作业一
-              <el-button type="primary" style="margin-left: 470px">下载</el-button>
-              <el-button type="primary" style="margin-left: auto">提交</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              作业二
-              <el-button type="primary" style="margin-left: 470px">下载</el-button>
-              <el-button type="primary" style="margin-left: auto">提交</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              作业三
-              <el-button type="primary" style="margin-left: 470px">下载</el-button>
-              <el-button type="primary" style="margin-left: auto">提交</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              作业四
-              <el-button type="primary" style="margin-left: 470px">下载</el-button>
-              <el-button type="primary" style="margin-left: auto">提交</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              作业五
-              <el-button type="primary" style="margin-left: 470px">下载</el-button>
-              <el-button type="primary" style="margin-left: auto">提交</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              作业六
-              <el-button type="primary" style="margin-left: 470px">下载</el-button>
-              <el-button type="primary" style="margin-left: auto">提交</el-button>
-            </div>
-            <div class="scrollbar-demo-item">
-              <el-icon><ChatLineSquare /></el-icon>
-              作业七
+            <div class="scrollbar-demo-item" v-for="item in works">
+              <el-icon><Document /></el-icon>
+              {{item}}
               <el-button type="primary" style="margin-left: 470px">下载</el-button>
               <el-button type="primary" style="margin-left: auto">提交</el-button>
             </div>

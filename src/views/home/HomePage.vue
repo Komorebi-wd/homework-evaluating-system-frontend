@@ -19,7 +19,7 @@
           <el-carousel :interval="4000" type="card" height="300px" >
 
             <el-carousel-item v-for="item in homes" :key="item">
-              <el-image :src="item.url"></el-image>
+              <el-image :src="item.url" :alt="item.text"></el-image>
             </el-carousel-item>
 
           </el-carousel>
