@@ -2,12 +2,15 @@
 
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
-import {ChatLineSquare} from "@element-plus/icons-vue";
+import {ChatLineSquare, Document} from "@element-plus/icons-vue";
 import router from "@/router";
 
 const goToPage = (path)  => {
   router.push(path);
 };
+const homeworks=[
+    '作业一','作业二','作业三','作业四','作业五','作业六','作业七'
+]
 
 </script>
 
@@ -26,61 +29,12 @@ const goToPage = (path)  => {
 
         <el-main style="display:flex">
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
-            <div className="scrollbar-demo-item">
+            <div className="scrollbar-demo-item" v-for="item in homeworks">
               <el-icon>
-                <ChatLineSquare/>
+                <Document/>
               </el-icon>
-              作业一
+              {{item}}
               <el-button type="primary" @click="goToPage('/evaluate')" style="margin-left: auto">批改</el-button>
-
-            </div>
-            <div className="scrollbar-demo-item">
-              <el-icon>
-                <ChatLineSquare/>
-              </el-icon>
-              作业二
-
-              <el-button type="primary" style="margin-left: auto">批改</el-button>
-            </div>
-            <div className="scrollbar-demo-item">
-              <el-icon>
-                <ChatLineSquare/>
-              </el-icon>
-              作业三
-
-              <el-button type="primary" style="margin-left: auto">批改</el-button>
-            </div>
-            <div className="scrollbar-demo-item">
-              <el-icon>
-                <ChatLineSquare/>
-              </el-icon>
-              作业四
-
-              <el-button type="primary" style="margin-left: auto">批改</el-button>
-            </div>
-            <div className="scrollbar-demo-item">
-              <el-icon>
-                <ChatLineSquare/>
-              </el-icon>
-              作业五
-
-              <el-button type="primary" style="margin-left: auto">批改</el-button>
-            </div>
-            <div className="scrollbar-demo-item">
-              <el-icon>
-                <ChatLineSquare/>
-              </el-icon>
-              作业六
-
-              <el-button type="primary" style="margin-left: auto">批改</el-button>
-            </div>
-            <div className="scrollbar-demo-item">
-              <el-icon>
-                <ChatLineSquare/>
-              </el-icon>
-              作业七
-
-              <el-button type="primary" style="margin-left: auto">批改</el-button>
             </div>
 
           </el-scrollbar>
