@@ -15,8 +15,8 @@
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
             <div class="scrollbar-demo-item" v-for="item in classes">
               <el-icon><Document /></el-icon>
-              {{item}}
-              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
+              {{item.cname}}
+              <el-button type="primary" @click="getClasses()" style="margin-left: auto">前往作业</el-button>
             </div>
 
           </el-scrollbar>
@@ -31,12 +31,65 @@
 <script setup>
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
-import { ref } from 'vue'
-import {ChatLineSquare, Document} from "@element-plus/icons-vue";
+import {onMounted, ref} from 'vue'
+import {Document} from "@element-plus/icons-vue";
+import {ElMessage} from "element-plus";
+import {showClasses} from "@/net";
 const count = ref(15)
-const classes=[
-    '数据库系统原理','人工智能基础','大数据概论','操作系统','机器学习','计算机网络','科技论文写作','专业课程实训','微积分','线性代数','概率论与数理统计','计算机组成原理'
-]
+var classes=['1']
+
+function getClasses(){
+    showClasses()
+        .then((data) => {
+          classes = data;
+          console.log(classes)
+          window.location.reload();
+        })
+        .catch((error) => {
+          //console.error(error);
+        });
+}
+
+//
+// onMounted(() => {
+//   getClasses()
+// });
+
+
+// function showClasses() {
+//     axios.get('http://localhost:8080/api/student/course/getAll').then(function (resp) {
+//     classes=resp.data;
+//   })
+// }
+
+
+
+
+
+
+// new Vue({
+//   el:"#get_class_list",
+//   data: {
+//     class_list: []
+//   },
+//   methods:{
+//     GetHostData:function(){
+//       var that=this;
+//       axios.get('http://localhost:8081/book/getAll').then(function (resp) {
+//         that.class_list=resp.data;
+//       })
+//     }
+//   },
+//   mounted:function () {   //自动触发写入的函数
+//     this.GetHostData();
+//   }
+// })
+
+
+// axios.get("http://localhost:8080/mem/findbyid/" + this.sno).then((resp) => {
+//   console.log(resp);
+// });
+
 
 </script>
 

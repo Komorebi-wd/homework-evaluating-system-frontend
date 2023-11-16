@@ -66,6 +66,10 @@ function internalGet(url, headers, success, failure, error = defaultError){
     }).catch(err => error(err))
 }
 
+
+
+
+
 function login(username, password, remember, success, failure = defaultFailure){
     internalPost('/api/auth/login', {
         username: username,
@@ -91,6 +95,18 @@ function logout(success, failure = defaultFailure){
     }, failure)
 }
 
+
+function showClasses() {
+    return new Promise((resolve, reject) => {
+        get('/api/student/course/getAll', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+
 function get(url, success, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure)
 }
@@ -99,4 +115,4 @@ function unauthorized() {
     return !takeAccessToken()
 }
 
-export { post, get, login, logout, unauthorized }
+export { post, get, login, logout, unauthorized,showClasses }
