@@ -37,26 +37,31 @@ const goToPage = (path) => {
       <span>首页</span>
     </el-menu-item>
     </router-link>
-    <router-link to="/homework">
+
+    <router-link to="/course">
     <el-menu-item index="2" >
       <el-icon><icon-menu /></el-icon>
       <span>课程平台</span>
     </el-menu-item>
     </router-link>
+
     <router-link to="/work">
     <el-menu-item index="3" @click="goToPage('/work')" >
         <el-icon><document /></el-icon>
          <span>作业平台</span>
     </el-menu-item>
     </router-link>
+
     <el-menu-item index="4" @click="goToPage('/evaluateHomework')">
       <el-icon><setting /></el-icon>
       <span>批改平台</span>
     </el-menu-item>
-    <el-menu-item index="5" @click="goToPage('/homework')">
+
+    <el-menu-item index="5" @click="goToPage('/course')">
       <el-icon><Star /></el-icon>
       <span>成绩统计</span>
     </el-menu-item>
+
   </el-menu>
 </template>
 

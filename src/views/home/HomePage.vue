@@ -31,7 +31,7 @@
             <template #header>
               <div class="card-header">
                 <span>课程平台</span>
-                <el-button class="button" text>前往</el-button>
+                <el-button @click="goToPage('/course')" class="button" text>前往</el-button>
               </div>
             </template>
              <div>
@@ -46,7 +46,7 @@
             <template #header>
               <div class="card-header">
                 <span>作业平台</span>
-                <el-button class="button" text>前往</el-button>
+                <el-button @click="goToPage('/work')" class="button" text>前往</el-button>
               </div>
             </template>
             <div>
@@ -61,7 +61,7 @@
             <template #header>
               <div class="card-header">
                 <span>批改平台</span>
-                <el-button class="button" text>前往</el-button>
+                <el-button @click="goToPage('/evaluateHomework')" class="button" text>前往</el-button>
               </div>
             </template>
             <div>
@@ -85,6 +85,7 @@
 
 import Sider from "@/views/elements/Sider.vue";
 import Header from "@/views/elements/Header.vue";
+import router from "@/router";
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
@@ -101,7 +102,9 @@ const homes=[
   {url:'src/resources/home3.png', text:'Image 3'},
   {url:'src/resources/home4.png', text:'Image 4'},
 ]
-
+const goToPage = (path)  => {
+  router.push(path);
+};
 
 </script>
 

@@ -35,9 +35,9 @@ const router = createRouter({
             component: () => import('@/views/home/HomePage.vue')
          },
         {
-            path: '/homework',
-            name: 'home-homework',
-            component: () => import('@/views/home/HomeworkPage.vue')
+            path: '/course',
+            name: 'course-platform',
+            component: () => import('@/views/home/CoursePage.vue')
         },
         {
             path: '/work',
