@@ -4,9 +4,32 @@ import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
+import {onMounted, ref} from "vue";
+import {showAllHomework, showClasses} from "@/net";
+const courseId = ref(0);
+const works= ref([]);
+onMounted(() => {
+  courseId.value = router.currentRoute.value.params.courseId;
+  console.log(courseId.value+"已经收到课程号")
+  getClasses()
+});
+function getClasses(){
+  console.log("11收到作业列表")
+     showAllHomework(courseId.value)
+      .then((data) => {
+        console.log("22收到作业列表")
+        works.value = data;
+        console.log("收到作业列表")
+        console.log(works.value)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+}
 
-import {ref} from "vue";
-const works=['作业一','作业二','作业三','作业四','作业五','作业六','作业七']
+
+
+
 
 const goToPage = (path)  => {
   router.push(path);
@@ -33,7 +56,7 @@ const goToPage = (path)  => {
 
             <div class="scrollbar-demo-item" v-for="item in works">
               <el-icon><Document /></el-icon>
-              {{item}}
+              {{item.fileName}}
               <el-button type="primary" style="margin-left: 470px">下载</el-button>
               <el-button type="primary" @click="goToPage('/SubmitStuHomework')" style="margin-left: auto"  >提交</el-button>
             </div>

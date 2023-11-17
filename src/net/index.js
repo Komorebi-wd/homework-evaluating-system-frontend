@@ -10,7 +10,7 @@ const accessHeader = () => {
 }
 
 const defaultError = (error) => {
-    console.error(error)
+    //console.error(error)
     ElMessage.error('发生了一些错误，请联系管理员')
 }
 
@@ -117,6 +117,32 @@ function showClasses() {
     });
 }
 
+function showMyClasses() {
+    return new Promise((resolve, reject) => {
+        get('/api/student/course/getMyCourses', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+function showAllHomework(courseId) {
+    return new Promise((resolve, reject) => {
+        console.log("连接中")
+        console.log(courseId)
+        get('/api/student/course/'+courseId+'/tHomework/getAll', (data) => {
+            console.log("连接成功")
+            resolve(data);
+        }, (error) => {
+            console.log("连接失败")
+            reject(error);
+        });
+    });
+}
+
+
+
 
 function get(url, success, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure)
@@ -126,4 +152,4 @@ function unauthorized() {
     return !takeAccessToken()
 }
 
-export { post, get, login, logout, unauthorized,showClasses }
+export { post, get, login, logout, unauthorized,showClasses,showMyClasses,showAllHomework }

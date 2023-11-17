@@ -60,7 +60,7 @@ const router = createRouter({
             component:()=>import('@/views/submit/SubmitStuHomework.vue')
         },
         {
-            path:'/workFromCourse',
+            path:'/workFromCourse/:courseId',
             name:'home-workFromCourse',
             component:()=>import('@/views/home/WorkFromCourse.vue')
         }

@@ -17,7 +17,7 @@
             <div class="scrollbar-demo-item" v-for="item in classes" :key="item.id">
               <el-icon><Document /></el-icon>
               {{item.cname}}
-              <el-button type="primary" style="margin-left: auto"  @click="goToPage('/WorkFromCourse')" >前往作业</el-button>
+              <el-button type="primary" style="margin-left: auto"  @click="goToPage(item.cid)" >前往作业</el-button>
             </div>
 
           </el-scrollbar>
@@ -30,13 +30,12 @@
 </template>
 
 <script setup>
+import router from "@/router";
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {onMounted, ref} from 'vue'
 import {Document} from "@element-plus/icons-vue";
 import {showClasses} from "@/net";
-import router from "@/router";
-const count = ref(15)
 
 // 定义响应式变量来保存课程列表
 const classes = ref([]);
@@ -47,7 +46,7 @@ function getClasses(){
           classes.value = data;
         })
         .catch((error) => {
-          //console.error(error);
+          console.error(error);
         });
 }
 
@@ -55,8 +54,9 @@ function getClasses(){
 onMounted(() => {
   getClasses()
 });
-const goToPage = (path)  => {
-  router.push(path);
+const goToPage = (courseId)  => {
+  console.log(courseId)
+  router.push(`/WorkFromCourse/${courseId}`);
 };
 
 
