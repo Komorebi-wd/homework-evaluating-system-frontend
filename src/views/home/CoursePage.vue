@@ -13,10 +13,11 @@
         <el-main style="display: flex">
 
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
-            <div class="scrollbar-demo-item" v-for="item in classes">
+
+            <div class="scrollbar-demo-item" v-for="item in classes" :key="item.id">
               <el-icon><Document /></el-icon>
               {{item.cname}}
-              <el-button type="primary" @click="getClasses()" style="margin-left: auto">前往作业</el-button>
+              <el-button type="primary" style="margin-left: auto">前往作业</el-button>
             </div>
 
           </el-scrollbar>
@@ -33,62 +34,26 @@ import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {onMounted, ref} from 'vue'
 import {Document} from "@element-plus/icons-vue";
-import {ElMessage} from "element-plus";
 import {showClasses} from "@/net";
 const count = ref(15)
-var classes=['1']
+
+// 定义响应式变量来保存课程列表
+const classes = ref([]);
 
 function getClasses(){
     showClasses()
         .then((data) => {
-          classes = data;
-          console.log(classes)
-          window.location.reload();
+          classes.value = data;
         })
         .catch((error) => {
           //console.error(error);
         });
 }
 
-//
-// onMounted(() => {
-//   getClasses()
-// });
-
-
-// function showClasses() {
-//     axios.get('http://localhost:8080/api/student/course/getAll').then(function (resp) {
-//     classes=resp.data;
-//   })
-// }
-
-
-
-
-
-
-// new Vue({
-//   el:"#get_class_list",
-//   data: {
-//     class_list: []
-//   },
-//   methods:{
-//     GetHostData:function(){
-//       var that=this;
-//       axios.get('http://localhost:8081/book/getAll').then(function (resp) {
-//         that.class_list=resp.data;
-//       })
-//     }
-//   },
-//   mounted:function () {   //自动触发写入的函数
-//     this.GetHostData();
-//   }
-// })
-
-
-// axios.get("http://localhost:8080/mem/findbyid/" + this.sno).then((resp) => {
-//   console.log(resp);
-// });
+//在页面加载前获取课程信息
+onMounted(() => {
+  getClasses()
+});
 
 
 </script>
