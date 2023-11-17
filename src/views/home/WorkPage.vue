@@ -3,7 +3,15 @@
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {Document} from "@element-plus/icons-vue";
+import router from "@/router";
+
+import {ref} from "vue";
 const works=['作业一','作业二','作业三','作业四','作业五','作业六','作业七']
+
+const goToPage = (path)  => {
+  router.push(path);
+};
+
 </script>
 
 <template>
@@ -20,12 +28,14 @@ const works=['作业一','作业二','作业三','作业四','作业五','作业
         </el-aside>
 
         <el-main style="display:flex">
+
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
+
             <div class="scrollbar-demo-item" v-for="item in works">
               <el-icon><Document /></el-icon>
               {{item}}
               <el-button type="primary" style="margin-left: 470px">下载</el-button>
-              <el-button type="primary" style="margin-left: auto">提交</el-button>
+              <el-button type="primary" @click="goToPage('/SubmitStuHomework')" style="margin-left: auto"  >提交</el-button>
             </div>
 
           </el-scrollbar>

@@ -59,10 +59,16 @@ function internalPost(url, data, headers, success, failure, error = defaultError
 
 function internalGet(url, headers, success, failure, error = defaultError){
     axios.get(url, { headers: headers }).then(({data}) => {
-        if(data.code === 200)
+        if(data.code === 200){
             success(data.data)
-        else
+        }
+            //success(data.data)
+            //return data.data;
+        else{
+            console.log(data.code,data.data)
             failure(data.message, data.code, url)
+        }
+            //failure(data.message, data.code, url)
     }).catch(err => error(err))
 }
 
@@ -82,7 +88,11 @@ function login(username, password, remember, success, failure = defaultFailure){
         success(data)
     }, failure)
 }
-
+// function showAllHomework(success, failure = defaultFailure){
+//     return new Promise=(resolve,reject)=>{
+//
+//     }
+// }
 function post(url, data, success, failure = defaultFailure) {
     internalPost(url, data, accessHeader() , success, failure)
 }
@@ -98,10 +108,11 @@ function logout(success, failure = defaultFailure){
 
 function showClasses() {
     return new Promise((resolve, reject) => {
-        get('/api/student/course/getAll', (data) => {
+        get('/api/student/course/getMyCourses', (data) => {
             resolve(data);
         }, (error) => {
             reject(error);
+
         });
     });
 }

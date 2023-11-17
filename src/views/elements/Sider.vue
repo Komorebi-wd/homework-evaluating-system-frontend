@@ -13,7 +13,7 @@ const goToPage = (path) => {
   //selectedItem.value = index; // 更新选中的菜单项
   //defaultActive.value = index;
   router.push(path).then(() => {
-    selectedItem.value = index; // 在页面成功跳转后更新选中的菜单项
+    //selectedItem.value = index; // 在页面成功跳转后更新选中的菜单项
     //defaultActive.value = index;
   //default-active="1"
   });

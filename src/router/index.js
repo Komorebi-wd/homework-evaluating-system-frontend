@@ -53,6 +53,11 @@ const router = createRouter({
             path: '/evaluate',
             name: 'evaluate-evaluate',
             component: () => import('@/views/evaluate/Evaluate.vue')
+        },
+        {
+            path:'/submitStuHomework',
+            name:'submit-submitStuHomework',
+            component:()=>import('@/views/submit/SubmitStuHomework.vue')
         }
     ]
 

@@ -12,7 +12,7 @@ fileUrl.value = 'http://www.example.com/path-to-your-file.pdf';
 // 假设的作业信息
 const homeworkInfo = reactive({
   course: '数学',
-  studentName: '张三'
+  homeworkId: 1
 });
 const setScore = (num) => {
   // 设置评分逻辑
@@ -42,37 +42,55 @@ const submit = () => {
 
         <div class="content-container" >
           <!-- 新增的显示作业信息的组件 -->
-<!--          <div class="homework-info-display">-->
+          <!--          <div class="homework-info-display">-->
 
-<!--          </div>-->
+          <!--          </div>-->
           <el-col span="4" >
-            <el-card class="box-card" style="margin-left: 60px">
+            <el-card class="box-card" style="margin-left: auto">
               <template #header>
-                <div class="card-header">
-                  <span>来自{{ homeworkInfo.studentName }}的{{ homeworkInfo.course }}作业</span>
-<!--                  <el-button class="button" text>前往</el-button>-->
-                  <span v-if="fileUrl">
-              <a :href="fileUrl" download>点击下载作业</a>
-            </span>
+                <div class="card-header" >
+                  <span>{{ homeworkInfo.course }}课的第{{ homeworkInfo.homeworkId }}次作业</span>
+                  <!--                  <el-button class="button" text>前往</el-button>-->
+                  <span v-if="fileUrl" >
+                  <a :href="fileUrl" download>点击下载作业</a>
+                  </span>
+                </div>
+                <div class="homework-display">
+                  <!-- 在线展示作业内容的区域 -->
+                  <span>{{ homeworkInfo.course }}课的第{{ homeworkInfo.homeworkId }}次作业的内容</span>
                 </div>
               </template>
-              <div class="homework-display">
-                <!-- 在线展示作业内容的区域 -->
 
-              </div>
-              <div class="score-comment-container vertical-section">
-                <div class="score-section ">
-                  <!-- 0到10的数字按钮用于选择得分 -->
-                  <el-button-group>
-                    <el-button v-for="num in 10" :key="num" @click="setScore(num)">{{ num }}</el-button>
-                  </el-button-group>
-                </div>
+              <div class="comment-container vertical-section">
 
-                <div class="comment-section">
-                  <!-- 文字输入框，用于输入评价 -->
-                  <el-input type="textarea" v-model="comment" placeholder="请输入评价" ref="commentInput"></el-input>
+                <div class="comment-section" >
+                  <!-- 文字输入框，用于输入作业内容 -->
+                  <el-input type="textarea" v-model="comment" :rows="8" size="large" placeholder="请输入你的答案" ref="commentInput"  clearable></el-input>
+                  <div class="button-container">
+                  <el-upload
+                      class="upload-btn"
+                      action="/upload"
+                      :on-success="handleUploadSuccess"
+                      :on-error="handleUploadError"
+                      :show-file-list="false"
+                      :before-upload="beforeUpload"
+                  >
+                    <el-button>添加图片</el-button>
+                  </el-upload>
+                  <el-upload
+                      class="upload-btn"
+                      action="/upload"
+                      :on-success="handleUploadSuccess"
+                      :on-error="handleUploadError"
+                      :show-file-list="false"
+                      :before-upload="beforeUpload"
+                  >
+                    <el-button>添加文件</el-button>
+                  </el-upload>
+                  </div>
                 </div>
               </div>
+
             </el-card>
           </el-col>
 
@@ -98,29 +116,29 @@ const submit = () => {
 
 }
 .card-header span + span {
-  margin-left: 450px;
+  margin-left: 400px;
 }
 .homework-info-display {
   margin-left: auto;
   margin-bottom: 20px; /* 与作业展示区域的间距 */
   /* 其他可能的样式，如字体大小、颜色等 */
 }
+.button-container {
+  display: flex;
 
+}
 .homework-display{
-  width: 700px;
-  height: 450px;
+  width: 630px;
+  height: 350px;
   border: 1px solid #ccc;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.score-section > .el-button-group > .el-button {
-  width: 10%; /* 每个按钮宽度设置为父元素的10%，确保填满整个按钮组 */
-}
-.score-section, .comment-section {
+.comment-section {
   margin-top: 10px;
-  width: 330px;
+  width: 630px;
 }
 
 .vertical-section {
