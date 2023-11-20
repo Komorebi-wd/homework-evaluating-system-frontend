@@ -1,19 +1,35 @@
 <script setup>
-import {ref, reactive, onMounted} from 'vue';
+import {ref, reactive, onMounted, computed} from 'vue';
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
-import {ChatLineSquare} from "@element-plus/icons-vue";
 import router from "@/router";
+import {showOneHomework} from "@/net";
 
 let comment = ref('');
 let fileUrl = ref('');
-const homework = ref(0);
+const courseId = ref(0);
+const thId = ref(0);
+const homework = ref([]);
+const courseName = ref('');
+
 
 onMounted(() => {
-  console.log("测试submitOnMount")
-  homework.value = router.currentRoute.value.params.homework;
-  console.log(homework.value)
+  courseId.value = router.currentRoute.value.query.cid;
+  thId.value = router.currentRoute.value.query.thId;
+  courseName.value = router.currentRoute.value.query.cname;
+  getHomework()
 });
+
+function getHomework(){
+  showOneHomework(courseId.value, thId.value)
+      .then((data) => {
+        homework.value = data;
+      })
+      .catch((error) => {
+      });
+}
+
+
 const setScore = (num) => {
   // 设置评分逻辑
 };
@@ -49,7 +65,7 @@ const cancel = () => {
             <el-card class="box-card" style="margin-left: auto">
               <template #header>
                 <div class="card-header" >
-                  <span>{{ homework }}课的第{{ homework }}次作业</span>
+                  <span>{{ courseName }}课的第{{ homework.thId }}次作业</span>
                   <!--                  <el-button class="button" text>前往</el-button>-->
                   <span v-if="fileUrl" >
                   <a :href="fileUrl" download>点击下载作业</a>
@@ -57,7 +73,7 @@ const cancel = () => {
                 </div>
                 <div class="homework-display">
                   <!-- 在线展示作业内容的区域 -->
-                  <span>{{ homework }}课的第{{ homework}}次作业的内容</span>
+                  <span>{{ courseName }}课的第{{ homework.thId}}次作业的内容</span>
                 </div>
               </template>
 

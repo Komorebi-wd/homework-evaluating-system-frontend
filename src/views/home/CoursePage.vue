@@ -17,7 +17,7 @@
             <div class="scrollbar-demo-item" v-for="item in classes" :key="item.id">
               <el-icon><Document /></el-icon>
               {{item.cname}}
-              <el-button type="primary" style="margin-left: auto"  @click="goToPage(item.cid)" >前往作业</el-button>
+              <el-button type="primary" style="margin-left: auto"  @click="goToPage(item.cid,item.cname)" >前往作业</el-button>
             </div>
 
           </el-scrollbar>
@@ -54,8 +54,15 @@ function getClasses(){
 onMounted(() => {
   getClasses()
 });
-const goToPage = (courseId)  => {
-  router.push(`/WorkFromCourse/${courseId}`);
+const goToPage = (cid,cname)  => {
+  //router.push(`/WorkFromCourse/${courseId}`);
+  router.push({
+    path: '/workFromCourse',
+    query: {
+      cid: cid,
+      cname: cname
+    }
+  });
 };
 
 

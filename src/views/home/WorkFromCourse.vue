@@ -4,30 +4,36 @@ import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
-import {onMounted, ref} from "vue";
-import {showAllHomework, showClasses} from "@/net";
+import { onMounted, ref} from "vue";
+import {showAllHomework} from "@/net";
+
 const courseId = ref(0);
+const courseName = ref('');
 const works= ref([]);
 onMounted(() => {
-  console.log("onmount收到的courseId"+router.currentRoute.value.params.courseId)
-  courseId.value = router.currentRoute.value.params.courseId;
+  courseId.value = router.currentRoute.value.query.cid;
+  courseName.value = router.currentRoute.value.query.cname;
   getClasses()
 });
+
 function getClasses(){
      showAllHomework(courseId.value)
       .then((data) => {
         works.value = data;
-        console.log(works.value)
       })
       .catch((error) => {
-        console.error(error);
       });
 }
 
-
-const goToPage = (homework)  => {
-  console.log(homework+"跳转咯");
-  router.push(`/SubmitStuHomework/${homework}`);
+const goToPage = (cid,thId)  => {
+  router.push({
+    path: '/submitStuHomework',
+    query: {
+      cid: cid,
+      thId: thId,
+      cname: courseName.value
+    }
+  });
 };
 
 </script>
@@ -35,6 +41,7 @@ const goToPage = (homework)  => {
 <template>
   <div class="common-layout">
     <el-container>
+
       <el-header style="display: grid; grid-template-columns: 1fr auto;">
         <Header />
       </el-header>
@@ -45,6 +52,7 @@ const goToPage = (homework)  => {
         </el-aside>
 
         <el-main style="display:flex">
+
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
             <div class="scrollbar-demo-item" v-for="item in works" style="display: flex; justify-content: space-between; align-items: center;">
               <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
@@ -53,12 +61,14 @@ const goToPage = (homework)  => {
               </div>
               <div>
                 <el-button type="primary">下载</el-button>
-                <el-button type="primary" @click="goToPage(item)">提交</el-button>
+                <el-button type="primary" @click="goToPage(item.cid,item.thId)">提交</el-button>
               </div>
             </div>
+
           </el-scrollbar>
           <el-calendar style="width: 600px;height: 550px" class="my-calendar" v-model="value" />
         </el-main>
+
       </el-container>
     </el-container>
 
