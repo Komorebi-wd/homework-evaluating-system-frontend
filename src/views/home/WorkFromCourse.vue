@@ -9,17 +9,14 @@ import {showAllHomework, showClasses} from "@/net";
 const courseId = ref(0);
 const works= ref([]);
 onMounted(() => {
+  console.log("onmount收到的courseId"+router.currentRoute.value.params.courseId)
   courseId.value = router.currentRoute.value.params.courseId;
-  console.log(courseId.value+"已经收到课程号")
   getClasses()
 });
 function getClasses(){
-  console.log("11收到作业列表")
      showAllHomework(courseId.value)
       .then((data) => {
-        console.log("22收到作业列表")
         works.value = data;
-        console.log("收到作业列表")
         console.log(works.value)
       })
       .catch((error) => {
@@ -28,11 +25,9 @@ function getClasses(){
 }
 
 
-
-
-
-const goToPage = (path)  => {
-  router.push(path);
+const goToPage = (homework)  => {
+  console.log(homework+"跳转咯");
+  router.push(`/SubmitStuHomework/${homework}`);
 };
 
 </script>
@@ -40,7 +35,6 @@ const goToPage = (path)  => {
 <template>
   <div class="common-layout">
     <el-container>
-
       <el-header style="display: grid; grid-template-columns: 1fr auto;">
         <Header />
       </el-header>
@@ -51,22 +45,23 @@ const goToPage = (path)  => {
         </el-aside>
 
         <el-main style="display:flex">
-
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
-
-            <div class="scrollbar-demo-item" v-for="item in works">
-              <el-icon><Document /></el-icon>
-              {{item.fileName}}
-              <el-button type="primary" style="margin-left: 470px">下载</el-button>
-              <el-button type="primary" @click="goToPage('/SubmitStuHomework')" style="margin-left: auto"  >提交</el-button>
+            <div class="scrollbar-demo-item" v-for="item in works" style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
+                <el-icon><Document /></el-icon>
+                {{item.fileName}}
+              </div>
+              <div>
+                <el-button type="primary">下载</el-button>
+                <el-button type="primary" @click="goToPage(item)">提交</el-button>
+              </div>
             </div>
-
           </el-scrollbar>
           <el-calendar style="width: 600px;height: 550px" class="my-calendar" v-model="value" />
         </el-main>
-
       </el-container>
     </el-container>
+
   </div>
 </template>
 

@@ -55,7 +55,6 @@ onMounted(() => {
   getClasses()
 });
 const goToPage = (courseId)  => {
-  console.log(courseId)
   router.push(`/WorkFromCourse/${courseId}`);
 };
 

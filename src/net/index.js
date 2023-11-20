@@ -141,6 +141,18 @@ function showAllHomework(courseId) {
     });
 }
 
+function showAllUnSubmitHomework() {
+    return new Promise((resolve, reject) => {
+        console.log("未提交作业连接中")
+        get('/api/student/tHomework/unSubmit/getAll', (data) => {
+            console.log("连接成功")
+            resolve(data);
+        }, (error) => {
+            console.log("连接失败")
+            reject(error);
+        });
+    });
+}
 
 
 
@@ -152,4 +164,4 @@ function unauthorized() {
     return !takeAccessToken()
 }
 
-export { post, get, login, logout, unauthorized,showClasses,showMyClasses,showAllHomework }
+export { post, get, login, logout, unauthorized,showClasses,showMyClasses,showAllHomework,showAllUnSubmitHomework }

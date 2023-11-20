@@ -1,18 +1,18 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import {ref, reactive, onMounted} from 'vue';
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {ChatLineSquare} from "@element-plus/icons-vue";
+import router from "@/router";
 
 let comment = ref('');
 let fileUrl = ref('');
+const homework = ref(0);
 
-// 从数据库中获取文件链接并设置给fileUrl
-fileUrl.value = 'http://www.example.com/path-to-your-file.pdf';
-// 假设的作业信息
-const homeworkInfo = reactive({
-  course: '数学',
-  homeworkId: 1
+onMounted(() => {
+  console.log("测试submitOnMount")
+  homework.value = router.currentRoute.value.params.homework;
+  console.log(homework.value)
 });
 const setScore = (num) => {
   // 设置评分逻辑
@@ -24,9 +24,9 @@ const cancel = () => {
   comment.value = '';
 
 };
-const submit = () => {
-  // 提交逻辑
-};
+// const submit = () => {
+//   // 提交逻辑
+// };
 </script>
 <template>
   <div class="common-layout">
@@ -49,7 +49,7 @@ const submit = () => {
             <el-card class="box-card" style="margin-left: auto">
               <template #header>
                 <div class="card-header" >
-                  <span>{{ homeworkInfo.course }}课的第{{ homeworkInfo.homeworkId }}次作业</span>
+                  <span>{{ homework }}课的第{{ homework }}次作业</span>
                   <!--                  <el-button class="button" text>前往</el-button>-->
                   <span v-if="fileUrl" >
                   <a :href="fileUrl" download>点击下载作业</a>
@@ -57,7 +57,7 @@ const submit = () => {
                 </div>
                 <div class="homework-display">
                   <!-- 在线展示作业内容的区域 -->
-                  <span>{{ homeworkInfo.course }}课的第{{ homeworkInfo.homeworkId }}次作业的内容</span>
+                  <span>{{ homework }}课的第{{ homework}}次作业的内容</span>
                 </div>
               </template>
 
