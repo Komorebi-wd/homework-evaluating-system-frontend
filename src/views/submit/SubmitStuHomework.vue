@@ -64,7 +64,7 @@ const cancel = () => {
             <el-card class="box-card" style="margin-left: auto">
               <template #header>
                 <div class="card-header" >
-                  <span>{{ courseName }}课的第{{ thId }}次作业</span>
+                  <span>{{ courseName }}课的第{{ thId%10 }}次作业</span>
                   <!--                  <el-button class="button" text>前往</el-button>-->
                   <span v-if="fileUrl" >
                   <a :href="fileUrl" download>点击下载作业</a>
@@ -72,7 +72,7 @@ const cancel = () => {
                 </div>
                 <div class="homework-display">
                   <!-- 在线展示作业内容的区域 -->
-                  <span>{{ courseName }}课的第{{ thId}}次作业的内容</span>
+                  <span>{{ courseName }}课的第{{ thId%10}}次作业的内容</span>
                 </div>
               </template>
 

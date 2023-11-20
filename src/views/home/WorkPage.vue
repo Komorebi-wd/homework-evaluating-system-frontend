@@ -6,12 +6,13 @@ import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
 
 import {onMounted, ref} from "vue";
-import {showAllHomework, showAllUnSubmitHomework, showClasses} from "@/net";
+import {showAllUnSubmitHomework} from "@/net";
 const works=ref([]);
 function getAllUnSubmitHomework(){
   showAllUnSubmitHomework()
       .then((data) => {
         works.value = data;
+        console.log(works.value)
       })
       .catch((error) => {
         console.error(error);
@@ -22,9 +23,21 @@ function getAllUnSubmitHomework(){
 onMounted(() => {
   getAllUnSubmitHomework()
 });
-const goToPage = (path)  => {
-  router.push(path);
+// const goToPage = (path)  => {
+//   router.push(path);
+// };
+
+const goToPage = (cid,thId,cname)  => {
+  router.push({
+    path: '/submitStuHomework',
+    query: {
+      cid: cid,
+      thId: thId,
+      cname: cname
+    }
+  });
 };
+
 
 </script>
 
@@ -46,10 +59,11 @@ const goToPage = (path)  => {
               <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
                 <el-icon><Document /></el-icon>
                 {{item.fileName}}
+                {{item.cname}}
               </div>
               <div>
                 <el-button type="primary">下载</el-button>
-                <el-button type="primary" @click="goToPage('/SubmitStuHomework')">提交</el-button>
+                <el-button type="primary" @click="goToPage(item.cid,item.thId,item.cname)">提交</el-button>
               </div>
             </div>
           </el-scrollbar>

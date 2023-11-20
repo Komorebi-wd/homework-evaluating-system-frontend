@@ -139,8 +139,11 @@ function showAllHomework(courseId) {
 
 function showOneHomework(courseId,thId) {
     return new Promise((resolve, reject) => {
+        console.log(courseId,thId)
         get('/api/student/course/'+courseId+'/tHomework/'+thId, (data) => {
+            console.log("开始查询")
             resolve(data);
+            console.log("查询成功")
         }, (error) => {
             reject(error);
         });
