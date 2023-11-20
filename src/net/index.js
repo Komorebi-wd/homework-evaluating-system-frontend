@@ -129,13 +129,9 @@ function showMyClasses() {
 
 function showAllHomework(courseId) {
     return new Promise((resolve, reject) => {
-        //console.log("连接中")
-        //console.log(courseId)
         get('/api/student/course/'+courseId+'/tHomework/getAll', (data) => {
-            //console.log("连接成功")
             resolve(data);
         }, (error) => {
-            //console.log("连接失败")
             reject(error);
         });
     });
@@ -143,13 +139,9 @@ function showAllHomework(courseId) {
 
 function showOneHomework(courseId,thId) {
     return new Promise((resolve, reject) => {
-        //console.log("连接中")
-        //console.log(courseId)
         get('/api/student/course/'+courseId+'/tHomework/'+thId, (data) => {
-            //console.log("连接成功")
             resolve(data);
         }, (error) => {
-            //console.log("连接失败")
             reject(error);
         });
     });
@@ -159,12 +151,9 @@ function showOneHomework(courseId,thId) {
 
 function showAllUnSubmitHomework() {
     return new Promise((resolve, reject) => {
-        //console.log("未提交作业连接中")
         get('/api/student/tHomework/unSubmit/getAll', (data) => {
-            //console.log("连接成功")
             resolve(data);
         }, (error) => {
-            //console.log("连接失败")
             reject(error);
         });
     });

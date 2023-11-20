@@ -20,6 +20,7 @@ function getClasses(){
      showAllHomework(courseId.value)
       .then((data) => {
         works.value = data;
+        console.log(works.value);
       })
       .catch((error) => {
       });
@@ -42,16 +43,24 @@ const goToPage = (cid,thId)  => {
   <div class="common-layout">
     <el-container>
 
-      <el-header style="display: grid; grid-template-columns: 1fr auto;">
-        <Header />
+      <el-header style="display: flex; grid-template-columns: 1fr auto;">
+<!--        <Header />-->
+        <h1>{{courseName}}</h1>
+        <h5 style="font-size: large;text-align: center;flex: 1">同伴作业互评系统</h5>
+        <div style="display: flex; justify-content: flex-end; align-items: center;">
+          <el-button type="primary">用户中心</el-button>
+          <el-button type="info">退出登录</el-button>
+        </div>
       </el-header>
 
       <el-container>
         <el-aside width="200px">
+
           <Sider />
         </el-aside>
 
         <el-main style="display:flex">
+
 
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
             <div class="scrollbar-demo-item" v-for="item in works" style="display: flex; justify-content: space-between; align-items: center;">
@@ -64,9 +73,11 @@ const goToPage = (cid,thId)  => {
                 <el-button type="primary" @click="goToPage(item.cid,item.thId)">提交</el-button>
               </div>
             </div>
-
           </el-scrollbar>
-          <el-calendar style="width: 600px;height: 550px" class="my-calendar" v-model="value" />
+
+
+          <el-calendar style="width: 600px;height: 550px" class="my-calendar" v-model="value" >
+          </el-calendar>
         </el-main>
 
       </el-container>
