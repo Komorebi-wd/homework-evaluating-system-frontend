@@ -1,11 +1,9 @@
 <script setup>
-
-import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
 import { onMounted, ref} from "vue";
-import {showAllHomework} from "@/net";
+import {showAllHomework,downloadThWithCidThid} from "@/net";
 
 const courseId = ref(0);
 const courseName = ref('');
@@ -20,11 +18,24 @@ function getClasses(){
      showAllHomework(courseId.value)
       .then((data) => {
         works.value = data;
-        console.log(works.value);
+        //console.log(works.value);
       })
       .catch((error) => {
       });
 }
+
+function downloadTh(cid, thId) {
+  console.log("下载作业");
+  downloadThWithCidThid(cid, thId)
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((error) => {
+        console.error('Download failed', error);
+      });
+}
+
+
 
 const goToPage = (cid,thId)  => {
   router.push({
@@ -69,7 +80,7 @@ const goToPage = (cid,thId)  => {
                 {{item.fileName}}
               </div>
               <div>
-                <el-button type="primary">下载</el-button>
+                <el-button type="primary" @click="downloadTh(item.cid,item.thId)">下载</el-button>
                 <el-button type="primary" @click="goToPage(item.cid,item.thId)">提交</el-button>
               </div>
             </div>

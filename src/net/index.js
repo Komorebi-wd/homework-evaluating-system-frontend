@@ -60,12 +60,14 @@ function internalPost(url, data, headers, success, failure, error = defaultError
 function internalGet(url, headers, success, failure, error = defaultError){
     axios.get(url, { headers: headers }).then(({data}) => {
         if(data.code === 200){
+            console.log("成功")
             success(data.data)
         }
             //success(data.data)
             //return data.data;
         else{
-            console.log(data.code,data.data)
+            console.log("失败")
+            //console.log(data.code,data.data)
             failure(data.message, data.code, url)
         }
             //failure(data.message, data.code, url)
@@ -140,7 +142,7 @@ function showAllHomework(courseId) {
 function showOneHomework(courseId,thId) {
     return new Promise((resolve, reject) => {
         console.log(courseId,thId)
-        get('/api/student/course/'+courseId+'/tHomework/'+thId, (data) => {
+        get('/api/student/course/'+courseId+'/tHomework/'+thId%10, (data) => {
             console.log("开始查询")
             resolve(data);
             console.log("查询成功")
@@ -163,6 +165,45 @@ function showAllUnSubmitHomework() {
 }
 
 
+function getForDownload(url, success, failure = defaultFailure) {
+    internalGetForDownload(url, accessHeader(), success, failure)
+}
+
+function internalGetForDownload(url, headers, success, failure, error = defaultError) {
+    axios.get(url, {
+        headers: headers,
+        responseType: 'blob'  // 设置响应类型为 blob
+    }).then(response => {
+        success(response);
+    }).catch(err => error(err));
+}
+
+function downloadThWithCidThid(cid, thId) {
+    return new Promise((resolve, reject) => {
+        const url = `/api/student/course/${cid}/tHomework/${thId%10}/download`;
+        getForDownload(url, response => {
+            const contentDisposition = response.headers['content-disposition'];
+            const filename = getFilenameFromContentDisposition(contentDisposition) || `homework-${cid}-${thId}.ext`;
+            const blobUrl = window.URL.createObjectURL(response.data);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename; // 使用后端提供的文件名
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(blobUrl);
+            resolve('Download successful');
+        }, reject);
+    });
+}
+
+function getFilenameFromContentDisposition(contentDisposition) {
+    const filenameMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/) || contentDisposition.match(/filename="(.+)"/);
+    if (filenameMatch && filenameMatch.length > 1) {
+        return decodeURIComponent(filenameMatch[1]);
+    }
+    return null;
+}
 
 function get(url, success, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure)
@@ -172,4 +213,4 @@ function unauthorized() {
     return !takeAccessToken()
 }
 
-export { post, get, login, logout, unauthorized,showClasses,showMyClasses,showAllHomework,showAllUnSubmitHomework,showOneHomework }
+export { post, get, login, logout, unauthorized,showClasses,showMyClasses,showAllHomework,showAllUnSubmitHomework,showOneHomework,downloadThWithCidThid }
