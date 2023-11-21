@@ -204,12 +204,13 @@ function downloadThWithCidThid(cid, thId) {
     });
 }
 
-function submitShWithSidCidThId(cid, thId, file) {
+function submitShWithSidCidThId(cid, thId, multipartFile) {
     const formData = new FormData();
     formData.append('cid', cid);
-    formData.append('thId', thId);
-    formData.append('multipartFile', file);
-
+    formData.append('thId', thId%10);
+    formData.append('multipartFile', multipartFile);
+    console.log("准备提交的文件已封装好")
+    console.log(cid,thId,multipartFile)
     return new Promise((resolve, reject) => {
         post('/api/student/course/tHomework/sHomework/submit', formData, (data) => {
             resolve(data);

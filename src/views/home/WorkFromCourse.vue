@@ -18,7 +18,6 @@ function getClasses(){
      showAllHomework(courseId.value)
       .then((data) => {
         works.value = data;
-        //console.log(works.value);
       })
       .catch((error) => {
       });

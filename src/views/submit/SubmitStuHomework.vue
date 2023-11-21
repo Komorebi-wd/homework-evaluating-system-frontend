@@ -6,6 +6,7 @@ import router from "@/router";
 import {showOneHomework,submitShWithSidCidThId} from "@/net";
 import type { UploadProps, UploadUserFile } from 'element-plus'
 
+
 let comment = ref('');
 let fileUrl = ref('');
 const courseId = ref(0) as any;
@@ -29,16 +30,57 @@ function getHomework(){
       .catch((error) => {
       });
 }
+function submit() {
+  if (fileList2.value.length === 0) {
+    console.error("没有选择文件");
+    return;
+  }
+  // 获取第一个上传的文件
+  let file = fileList2.value[0].raw;
 
-function submit(cid,thId,file){
-  submitShWithSidCidThId(cid,thId,file)
+  submitShWithSidCidThId(courseId.value, thId.value, file)
       .then((message) => {
-        console.log(message);
+        console.log("提交成功", message);
+        // 这里处理提交成功后的逻辑
       })
       .catch((error) => {
-        console.error('Download failed', error);
+        console.error("提交失败", error);
+        // 这里处理提交失败的逻辑
       });
 }
+
+// function submit(cid,thId,file){
+//   submitShWithSidCidThId(cid,thId,file)
+//       .then((message) => {
+//         console.log(message);
+//       })
+//       .catch((error) => {
+//         console.error('Download failed', error);
+//       });
+// }
+
+// function submit() {
+//   // 假设 fileList1 和 fileList2 分别存储图片和文件
+//   let allFiles = [...fileList1.value, ...fileList2.value];
+//
+//   console.log("显示提交的图片："+allFiles);
+//   let formData = new FormData();
+//   allFiles.forEach(file => {
+//     formData.append('multipartFile', file.raw); // 确保字段名称与后端期望的一致
+//   });
+//   formData.append('cid', courseId.value);
+//   formData.append('thId', thId.value);
+//
+//   submitShWithSidCidThId(courseId.value, thId.value, formData)
+//       .then((message) => {
+//         console.log(message);
+//         // 处理提交成功逻辑
+//       })
+//       .catch((error) => {
+//         console.error('Error during submission:', error);
+//         // 处理错误
+//       });
+// }
 
 
 const setScore = (num) => {
@@ -56,7 +98,7 @@ const empty = () => {
 
 
 
-
+let uploadFiles = ref([]) ;
 const fileList1 = ref<UploadUserFile[]>([])
 const fileList2 = ref<UploadUserFile[]>([])
 
@@ -71,6 +113,7 @@ const handlePreview: UploadProps['onPreview'] = (file) => {
 const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
   fileList1.value = uploadFiles.slice(-3)
   fileList2.value = uploadFiles.slice(-3)
+
 }
 
 
@@ -157,7 +200,7 @@ const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
           <div class="action-buttons">
             <!-- 取消和提交按钮 -->
             <el-button type="default" @click="cancel">取消</el-button>
-            <el-button type="primary" @click="submit(courseId,thId,fileUrl)">提交</el-button>
+            <el-button type="primary" @click="submit()">提交</el-button>
           </div>
         </div>
 

@@ -62,6 +62,11 @@ const goToPage = (path) => {
       <span>成绩统计</span>
     </el-menu-item>
 
+    <el-menu-item index="6" @click="goToPage('/workManage')">
+      <el-icon><Star /></el-icon>
+      <span>作业管理</span>
+    </el-menu-item>
+
   </el-menu>
 </template>
 

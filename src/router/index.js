@@ -63,6 +63,11 @@ const router = createRouter({
             path:'/workFromCourse',
             name:'home-workFromCourse',
             component:()=>import('@/views/home/WorkFromCourse.vue')
+        },
+        {
+            path:'/workManage',
+            name:'teacher-workManage',
+            component:()=>import('@/views/home/WorkManagePage.vue')
         }
 
     ]
