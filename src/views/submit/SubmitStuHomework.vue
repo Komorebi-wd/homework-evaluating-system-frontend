@@ -1,23 +1,23 @@
-<script setup>
-import {ref, reactive, onMounted, computed} from 'vue';
+<script lang="ts" setup>
+import {ref, onMounted} from 'vue';
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import router from "@/router";
-import {showOneHomework} from "@/net";
+import {showOneHomework,submitShWithSidCidThId} from "@/net";
+import type { UploadProps, UploadUserFile } from 'element-plus'
 
 let comment = ref('');
 let fileUrl = ref('');
-const courseId = ref(0);
-const thId = ref(0);
-const homework = ref([]);
-const courseName = ref('');
+const courseId = ref(0) as any;
+const thId = ref(0) as any;
+const homework = ref([]) as any;
+const courseName = ref('') as any;
 
 
 onMounted(() => {
   courseId.value = router.currentRoute.value.query.cid;
   thId.value = router.currentRoute.value.query.thId;
   courseName.value = router.currentRoute.value.query.cname;
-  console.log("作业号："+thId.value);
   getHomework()
 });
 
@@ -25,9 +25,18 @@ function getHomework(){
   showOneHomework(courseId.value, thId.value)
       .then((data) => {
         homework.value = data;
-        console.log(homework.value);
       })
       .catch((error) => {
+      });
+}
+
+function submit(cid,thId,file){
+  submitShWithSidCidThId(cid,thId,file)
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((error) => {
+        console.error('Download failed', error);
       });
 }
 
@@ -36,13 +45,38 @@ const setScore = (num) => {
   // 设置评分逻辑
 };
 const cancel = () => {
+  router.go(-1); // 后退到上一个页面
+};
+const empty = () => {
   // 取消逻辑
   // 获取文本框的引用
   // 清空文本框的值
   comment.value = '';
-
 };
+
+
+
+
+const fileList1 = ref<UploadUserFile[]>([])
+const fileList2 = ref<UploadUserFile[]>([])
+
+const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles)
+}
+
+const handlePreview: UploadProps['onPreview'] = (file) => {
+  console.log(file)
+}
+
+const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
+  fileList1.value = uploadFiles.slice(-3)
+  fileList2.value = uploadFiles.slice(-3)
+}
+
+
 </script>
+
+
 <template>
   <div class="common-layout">
     <el-container >
@@ -61,7 +95,7 @@ const cancel = () => {
 
           <!--          </div>-->
           <el-col span="4" >
-            <el-card class="box-card" style="margin-left: auto">
+            <el-card class="box-card" style="margin-left: auto;display: flex">
               <template #header>
                 <div class="card-header" >
                   <span>{{ courseName }}课的第{{ thId%10}}次作业</span>
@@ -79,29 +113,40 @@ const cancel = () => {
               <div class="comment-container vertical-section">
 
                 <div class="comment-section" >
+
                   <!-- 文字输入框，用于输入作业内容 -->
-                  <el-input type="textarea" v-model="comment" :rows="8" size="large" placeholder="请输入你的答案" ref="commentInput"  clearable></el-input>
+                  <el-input type="textarea" v-model="comment" :rows="8" size="large" placeholder="请输入你的答案" ref="commentInput"  clearable>
+
+                  </el-input>
+
                   <div class="button-container">
-                  <el-upload
-                      class="upload-btn"
-                      action="/upload"
-                      :on-success="handleUploadSuccess"
-                      :on-error="handleUploadError"
-                      :show-file-list="false"
-                      :before-upload="beforeUpload"
-                  >
-                    <el-button>添加图片</el-button>
-                  </el-upload>
-                  <el-upload
-                      class="upload-btn"
-                      action="/upload"
-                      :on-success="handleUploadSuccess"
-                      :on-error="handleUploadError"
-                      :show-file-list="false"
-                      :before-upload="beforeUpload"
-                  >
-                    <el-button>添加文件</el-button>
-                  </el-upload>
+                    <div class="left-buttons">
+                      <el-upload
+                          v-model:file-list="fileList1"
+                          class="upload-demo"
+                          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                          :on-preview="handlePreview"
+                          :on-remove="handleRemove"
+                          list-type="picture"
+                          :auto-upload="false"
+                      >
+                        <el-button type="primary">添加图片</el-button>
+                      </el-upload>
+
+
+                      <el-upload
+                          v-model:file-list="fileList2"
+                          class="upload-demo"
+                          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                          :on-preview="handlePreview"
+                          :on-remove="handleRemove"
+                          :auto-upload="false"
+                      >
+                        <el-button type="primary">添加文件</el-button>
+                      </el-upload>
+
+                    </div>
+                    <el-button type="default" @click="empty">清空</el-button>
                   </div>
                 </div>
               </div>
@@ -112,7 +157,7 @@ const cancel = () => {
           <div class="action-buttons">
             <!-- 取消和提交按钮 -->
             <el-button type="default" @click="cancel">取消</el-button>
-            <el-button type="primary" @click="submit">提交</el-button>
+            <el-button type="primary" @click="submit(courseId,thId,fileUrl)">提交</el-button>
           </div>
         </div>
 
@@ -133,14 +178,13 @@ const cancel = () => {
 .card-header span + span {
   margin-left: 400px;
 }
-.homework-info-display {
-  margin-left: auto;
-  margin-bottom: 20px; /* 与作业展示区域的间距 */
-  /* 其他可能的样式，如字体大小、颜色等 */
-}
+
 .button-container {
   display: flex;
-
+  justify-content: space-between;
+}
+.left-buttons {
+  display: flex; /* 设置为 flex 布局以横向排列按钮 */
 }
 .homework-display{
   width: 630px;

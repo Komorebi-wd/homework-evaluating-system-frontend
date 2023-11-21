@@ -177,6 +177,13 @@ function internalGetForDownload(url, headers, success, failure, error = defaultE
         success(response);
     }).catch(err => error(err));
 }
+function getFilenameFromContentDisposition(contentDisposition) {
+    const filenameMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/) || contentDisposition.match(/filename="(.+)"/);
+    if (filenameMatch && filenameMatch.length > 1) {
+        return decodeURIComponent(filenameMatch[1]);
+    }
+    return null;
+}
 
 function downloadThWithCidThid(cid, thId) {
     return new Promise((resolve, reject) => {
@@ -197,12 +204,19 @@ function downloadThWithCidThid(cid, thId) {
     });
 }
 
-function getFilenameFromContentDisposition(contentDisposition) {
-    const filenameMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/) || contentDisposition.match(/filename="(.+)"/);
-    if (filenameMatch && filenameMatch.length > 1) {
-        return decodeURIComponent(filenameMatch[1]);
-    }
-    return null;
+function submitShWithSidCidThId(cid, thId, file) {
+    const formData = new FormData();
+    formData.append('cid', cid);
+    formData.append('thId', thId);
+    formData.append('multipartFile', file);
+
+    return new Promise((resolve, reject) => {
+        post('/api/student/course/tHomework/sHomework/submit', formData, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
 }
 
 function get(url, success, failure = defaultFailure) {
@@ -213,4 +227,4 @@ function unauthorized() {
     return !takeAccessToken()
 }
 
-export { post, get, login, logout, unauthorized,showClasses,showMyClasses,showAllHomework,showAllUnSubmitHomework,showOneHomework,downloadThWithCidThid }
+export { post, get, login, logout, unauthorized,showClasses,showMyClasses,showAllHomework,showAllUnSubmitHomework,showOneHomework,downloadThWithCidThid,submitShWithSidCidThId }
