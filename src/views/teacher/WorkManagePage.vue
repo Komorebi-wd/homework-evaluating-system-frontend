@@ -1,21 +1,46 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import { reactive } from 'vue'
+import router from "@/router";
+import {UploadProps, UploadUserFile} from "element-plus";
+import{putThWithCidEndDateComment} from "@/net";
 // do not use same name with ref
 const form = reactive({
-  name: '',
-  region: '',
+  comment: '',
   date: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
 })
+const courseId = ref(0) as any;
+onMounted(() => {
+  courseId.value = router.currentRoute.value.query.cid;
+});
+
 
 const onSubmit = () => {
-  console.log('submit!')
+  //console.log(form)
+  let file = fileList.value[0].raw
+  putThWithCidEndDateComment(num.value,courseId.value,form.date,form.comment,file)
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((error) => {
+        console.error('发布作业失败', error);
+      });
+}
+
+const fileList= ref<UploadUserFile[]>([])
+
+const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles)
+}
+
+const handlePreview: UploadProps['onPreview'] = (file) => {
+  console.log(file)
+}
+const num = ref(1)
+const handleChange = (value: number) => {
+  console.log(value)
 }
 </script>
 
@@ -34,16 +59,27 @@ const onSubmit = () => {
 
         <el-main>
           <el-form :model="form" label-width="120px">
+            <div style="display: flex">
+            <el-form-item label="作业内容">
 
-            <el-form-item label="作业名称">
-              <el-input v-model="form.name" />
             </el-form-item>
+            <el-upload
+                v-model:file-list="fileList"
+                class="upload-demo"
+                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :auto-upload="false"
+            >
+              <el-button type="primary">选择文件</el-button>
+            </el-upload>
+            </div>
 
-            <el-form-item label="Activity zone">
-              <el-select v-model="form.region" placeholder="please select your zone">
-                <el-option label="Zone one" value="shanghai" />
-                <el-option label="Zone two" value="beijing" />
-              </el-select>
+            <el-form-item label="作业布置次数">
+              <el-input-number v-model="num" :min="1" :max="10" @change="handleChange" />
+            </el-form-item>
+            <el-form-item label="作业注意事项">
+              <el-input v-model="form.comment" style="width: 530px"/>
             </el-form-item>
 
             <el-form-item label="提交截止日期">
@@ -57,22 +93,11 @@ const onSubmit = () => {
                 />
               </el-col>
 
-            </el-form-item>
 
-            <el-form-item label="Instant delivery">
-              <el-switch v-model="form.delivery" />
             </el-form-item>
 
 
-            <el-form-item label="Resources">
-              <el-radio-group v-model="form.resource">
-                <el-radio label="Sponsor" />
-                <el-radio label="Venue" />
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="Activity form">
-              <el-input v-model="form.desc" type="textarea" />
-            </el-form-item>
+
 
             <el-form-item>
               <el-button type="primary" @click="onSubmit">发布</el-button>

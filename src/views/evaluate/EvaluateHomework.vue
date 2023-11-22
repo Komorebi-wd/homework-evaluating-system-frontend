@@ -6,9 +6,18 @@ import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
 import {getDistributions} from "@/net";
 import {onMounted, ref} from "vue";
-const goToPage = (path)  => {
-  router.push(path);
+
+
+const goToPage = (shId,submitTime)  => {
+  router.push({
+    path: '/evaluate',
+    query: {
+      shId: shId,
+      submitTime: submitTime
+    }
+  });
 };
+
 const homeworks= ref([]);
 
 onMounted(() => {
@@ -48,8 +57,8 @@ function getMyDistributions(){
               <el-icon>
                 <Document/>
               </el-icon>
-              {{item.cname}}
-              <el-button type="primary" @click="goToPage('/evaluate')" style="margin-left: auto">批改</el-button>
+              {{item.fileName}}
+              <el-button type="primary" @click="goToPage(item.shId,item.submitTime)" style="margin-left: auto">批改</el-button>
             </div>
 
           </el-scrollbar>

@@ -73,11 +73,6 @@ const router = createRouter({
             path:'/teachCourse',
             name:'teacher-teachCourse',
             component:()=>import('@/views/teacher/TeachCoursePage.vue')
-        },
-        {
-            path:'/test',
-            name:'test-table',
-            component:()=>import('@/views/home/test.vue')
         }
 
     ]

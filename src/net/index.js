@@ -174,6 +174,21 @@ function showOneHomework(courseId,thId) {
     });
 }
 
+function getShWithShId(shId) {
+    return new Promise((resolve, reject) => {
+        console.log(shId)
+        console.log("开始查询")
+        get('/api/student/course/tHomework/sHomework/'+shId, (data) => {
+            console.log("到达此处")
+            resolve(data);
+            console.log("查询成功")
+        }, (error) => {
+            reject(error);
+            console.log("查询失败")
+        });
+    });
+}
+
 
 
 function showAllUnSubmitHomework() {
@@ -226,21 +241,66 @@ function downloadThWithCidThid(cid, thId) {
     });
 }
 
-// function submitShWithSidCidThId(cid, thId, multipartFile) {
-//     const formData = new FormData();
-//     formData.append('cid', cid);
-//     formData.append('thId', thId%10);
-//     formData.append('multipartFile', multipartFile);
-//     console.log("准备提交的文件已封装好")
-//     console.log(cid,thId,multipartFile)
-//     return new Promise((resolve, reject) => {
-//         post('/api/student/course/tHomework/sHomework/submitAll', formData, (data) => {
-//             resolve(data);
-//         }, (error) => {
-//             reject(error);
-//         });
-//     });
-// }
+function downloadShWithShId(shId) {
+    return new Promise((resolve, reject) => {
+        const url = `/api/student/course/tHomework/sHomework/${shId}/download`;
+        getForDownload(url, response => {
+            const contentDisposition = response.headers['content-disposition'];
+            const filename = getFilenameFromContentDisposition(contentDisposition) || `homework-${shId}.ext`;
+            const blobUrl = window.URL.createObjectURL(response.data);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename; // 使用后端提供的文件名
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(blobUrl);
+            resolve('Download successful');
+        }, reject);
+    });
+}
+
+function putThWithCidEndDateComment(thId, cid, Date, comment,multipartFile) {
+    const formData = new FormData();
+    formData.append('thId', thId);
+    formData.append('cid', cid);
+    formData.append('endDate', Date);
+    formData.append('comment', comment);
+    formData.append('multipartFile', multipartFile);
+    console.log("准备发布的作业已封装好")
+    console.log(thId);
+    // console.log(cid);
+    // console.log(Date);
+    // console.log(comment);
+    // console.log(multipartFile);
+    return new Promise((resolve, reject) => {
+        post('/api/teacher/tHomework/upload', formData, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+function addMarkWithShIdCommentCommentIdScore(shId, comment, score,multipartFile) {
+    const formData = new FormData();
+    formData.append('shId', shId);
+    formData.append('comment', comment);
+    formData.append('score', score);
+    formData.append('multipartFile', multipartFile);
+    console.log("准备发布的作业已封装好")
+    console.log(shId);
+    console.log(comment);
+    console.log(score);
+    console.log(multipartFile);
+    return new Promise((resolve, reject) => {
+        post('/api/student/course/tHomework/sHomework/comment/submit', formData, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
 
 function submitShWithSidCidThId(cid, thId,comment, multipartFiles) {
     const formData = new FormData();
@@ -277,4 +337,6 @@ function unauthorized() {
 export { post, get, login, logout,
     unauthorized,showClasses,showMyClasses,showAllHomework,
     showAllUnSubmitHomework,showOneHomework,downloadThWithCidThid,
-    submitShWithSidCidThId,getAllCoursesByTid,getDistributions }
+    submitShWithSidCidThId,getAllCoursesByTid,getDistributions,
+    putThWithCidEndDateComment,addMarkWithShIdCommentCommentIdScore,
+    getShWithShId,downloadShWithShId}
