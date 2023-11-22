@@ -73,6 +73,12 @@ const goToPage = (cid,thId)  => {
 
 
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
+            <div class="scrollbar-demo-item"  style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
+                 作业名称
+              </div>
+            </div>
+
             <div class="scrollbar-demo-item" v-for="item in works" style="display: flex; justify-content: space-between; align-items: center;">
               <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
                 <el-icon><Document /></el-icon>

@@ -2,15 +2,30 @@
 
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
-import {ChatLineSquare, Document} from "@element-plus/icons-vue";
+import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
-
+import {getDistributions} from "@/net";
+import {onMounted, ref} from "vue";
 const goToPage = (path)  => {
   router.push(path);
 };
-const homeworks=[
-    '作业一','作业二','作业三','作业四','作业五','作业六','作业七'
-]
+const homeworks= ref([]);
+
+onMounted(() => {
+  getMyDistributions()
+});
+
+function getMyDistributions(){
+  getDistributions()
+      .then((data) => {
+        homeworks.value = data;
+        console.log("成功获取到待批改作业")
+        console.log(homeworks.value)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+}
 
 </script>
 
@@ -33,7 +48,7 @@ const homeworks=[
               <el-icon>
                 <Document/>
               </el-icon>
-              {{item}}
+              {{item.cname}}
               <el-button type="primary" @click="goToPage('/evaluate')" style="margin-left: auto">批改</el-button>
             </div>
 

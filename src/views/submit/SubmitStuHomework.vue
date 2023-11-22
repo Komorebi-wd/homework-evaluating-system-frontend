@@ -6,11 +6,11 @@ import router from "@/router";
 import {showOneHomework,submitShWithSidCidThId} from "@/net";
 import {downloadThWithCidThid} from "@/net";
 import type { UploadProps, UploadUserFile } from 'element-plus'
+
 import mammoth from 'mammoth';
 
 
 let comment = ref('');
-let fileUrl = ref('');
 const courseId = ref(0) as any;
 const thId = ref(0) as any;
 const homework = ref([]) as any;
@@ -108,24 +108,47 @@ function determineFileType(blob) {
   // 根据 Blob 数据确定文件类型
   return blob.type;
 }
-function submit() {
-  if (fileList2.value.length === 0) {
-    console.error("没有选择文件");
-    return;
-  }
-  // 获取第一个上传的文件
-  let file = fileList2.value[0].raw;
 
-  submitShWithSidCidThId(courseId.value, thId.value, file)
+
+//提交作业函数
+// function submit() {
+//   const file=ref([]) as any;
+//   for (let i = 0; i < fileList2.value.length; i++) {
+//     file.value[i] = fileList2.value[i].raw;
+//     console.log(file.value);
+//   }
+//
+//   submitShWithSidCidThId(courseId.value, thId.value, file)
+//       .then((message) => {
+//         console.log("提交成功", message);
+//         // 这里处理提交成功后的逻辑
+//       })
+//       .catch((error) => {
+//         console.error("提交失败", error);
+//         // 这里处理提交失败的逻辑
+//       });
+// }
+function submit() {
+  const files = []; // 创建一个数组来存储文件
+  for (let i = 0; i < fileList1.value.length; i++) {
+    files.push(fileList1.value[i].raw); // 将文件添加到数组中
+  }
+
+  for (let i = 0; i < fileList2.value.length; i++) {
+    files.push(fileList2.value[i].raw); // 将文件添加到数组中
+  }
+
+  submitShWithSidCidThId(courseId.value, thId.value, comment.value,files)
       .then((message) => {
-        console.log("提交成功", message);
+        //console.log("提交成功", message);
         // 这里处理提交成功后的逻辑
       })
       .catch((error) => {
-        console.error("提交失败", error);
+        //console.error("提交失败", error);
         // 这里处理提交失败的逻辑
       });
 }
+
 
 
 const setScore = (num) => {
@@ -142,8 +165,6 @@ const empty = () => {
 };
 
 
-
-let uploadFiles = ref([]) ;
 const fileList1 = ref<UploadUserFile[]>([])
 const fileList2 = ref<UploadUserFile[]>([])
 

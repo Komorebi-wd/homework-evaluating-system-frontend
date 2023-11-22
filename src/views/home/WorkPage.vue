@@ -6,7 +6,7 @@ import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
 
 import {onMounted, ref} from "vue";
-import {showAllUnSubmitHomework} from "@/net";
+import {downloadThWithCidThid, showAllUnSubmitHomework} from "@/net";
 const works=ref([]);
 function getAllUnSubmitHomework(){
   showAllUnSubmitHomework()
@@ -23,9 +23,16 @@ function getAllUnSubmitHomework(){
 onMounted(() => {
   getAllUnSubmitHomework()
 });
-// const goToPage = (path)  => {
-//   router.push(path);
-// };
+function downloadTh(cid, thId) {
+  console.log("下载作业");
+  downloadThWithCidThid(cid, thId)
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((error) => {
+        console.error('Download failed', error);
+      });
+}
 
 const goToPage = (cid,thId,cname)  => {
   router.push({
@@ -62,7 +69,7 @@ const goToPage = (cid,thId,cname)  => {
                 {{item.cname}}
               </div>
               <div>
-                <el-button type="primary">下载</el-button>
+                <el-button type="primary" @click="downloadTh(item.cid,item.thId)">下载</el-button>
                 <el-button type="primary" @click="goToPage(item.cid,item.thId,item.cname)">提交</el-button>
               </div>
             </div>

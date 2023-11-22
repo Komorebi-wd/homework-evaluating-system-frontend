@@ -119,6 +119,28 @@ function showClasses() {
     });
 }
 
+//获取自己被分配的所有待批改作业
+function getDistributions() {
+    return new Promise((resolve, reject) => {
+        get('/api/student/distribution/getAll', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+function getAllCoursesByTid() {
+    return new Promise((resolve, reject) => {
+        get('/api/teacher/course/getAll', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+
 function showMyClasses() {
     return new Promise((resolve, reject) => {
         get('/api/student/course/getMyCourses', (data) => {
@@ -204,21 +226,45 @@ function downloadThWithCidThid(cid, thId) {
     });
 }
 
-function submitShWithSidCidThId(cid, thId, multipartFile) {
+// function submitShWithSidCidThId(cid, thId, multipartFile) {
+//     const formData = new FormData();
+//     formData.append('cid', cid);
+//     formData.append('thId', thId%10);
+//     formData.append('multipartFile', multipartFile);
+//     console.log("准备提交的文件已封装好")
+//     console.log(cid,thId,multipartFile)
+//     return new Promise((resolve, reject) => {
+//         post('/api/student/course/tHomework/sHomework/submitAll', formData, (data) => {
+//             resolve(data);
+//         }, (error) => {
+//             reject(error);
+//         });
+//     });
+// }
+
+function submitShWithSidCidThId(cid, thId,comment, multipartFiles) {
     const formData = new FormData();
     formData.append('cid', cid);
-    formData.append('thId', thId%10);
-    formData.append('multipartFile', multipartFile);
-    console.log("准备提交的文件已封装好")
-    console.log(cid,thId,multipartFile)
+    formData.append('thId', thId % 10);
+    formData.append('comment', comment);
+    // 循环遍历文件数组，将每个文件添加到formData中
+    multipartFiles.forEach((file, index) => {
+        //formData.append(`multipartFiles[${index}]`, file);
+        formData.append('multipartFiles', file);
+    });
+
+    console.log("准备提交的文件已封装好");
+    console.log(cid, thId, comment,formData);
+
     return new Promise((resolve, reject) => {
-        post('/api/student/course/tHomework/sHomework/submit', formData, (data) => {
+        post('/api/student/course/tHomework/sHomework/submitAll', formData, (data) => {
             resolve(data);
         }, (error) => {
             reject(error);
         });
     });
 }
+
 
 function get(url, success, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure)
@@ -228,4 +274,7 @@ function unauthorized() {
     return !takeAccessToken()
 }
 
-export { post, get, login, logout, unauthorized,showClasses,showMyClasses,showAllHomework,showAllUnSubmitHomework,showOneHomework,downloadThWithCidThid,submitShWithSidCidThId }
+export { post, get, login, logout,
+    unauthorized,showClasses,showMyClasses,showAllHomework,
+    showAllUnSubmitHomework,showOneHomework,downloadThWithCidThid,
+    submitShWithSidCidThId,getAllCoursesByTid,getDistributions }

@@ -3,7 +3,7 @@ import {
   Document,
   Menu as IconMenu,
   Location,
-  Setting, Star,
+  Setting, Star, Avatar,
 } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router';
 import { ref } from 'vue'
@@ -62,9 +62,9 @@ const goToPage = (path) => {
       <span>成绩统计</span>
     </el-menu-item>
 
-    <el-menu-item index="6" @click="goToPage('/workManage')">
-      <el-icon><Star /></el-icon>
-      <span>作业管理</span>
+    <el-menu-item index="6" @click="goToPage('/teachCourse')">
+      <el-icon><Avatar /></el-icon>
+      <span>教学平台</span>
     </el-menu-item>
 
   </el-menu>
