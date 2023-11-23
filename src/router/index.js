@@ -73,6 +73,21 @@ const router = createRouter({
             path:'/teachCourse',
             name:'teacher-teachCourse',
             component:()=>import('@/views/teacher/TeachCoursePage.vue')
+        },
+        {
+            path:'/evaluatePlatform',
+            name:'evaluatePlatform',
+            component:()=>import('@/views/evaluate/EvaluatePlatformPage.vue')
+        },
+        {
+            path:'/evaluateRecords',
+            name:'evaluateRecords',
+            component:()=>import('@/views/evaluate/EvaluateRecordsPage.vue')
+        },
+        {
+            path:'/markFromCourse',
+            name:'markFromCourse',
+            component:()=>import('@/views/evaluate/MarkFromCoursePage.vue')
         }
 
     ]

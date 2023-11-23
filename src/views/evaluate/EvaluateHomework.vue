@@ -4,7 +4,7 @@ import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
-import {getDistributions} from "@/net";
+import {getDistributions, downloadAllDistributions, downloadThWithCidThid} from "@/net";
 import {onMounted, ref} from "vue";
 
 
@@ -36,6 +36,17 @@ function getMyDistributions(){
       });
 }
 
+function downloadTh() {
+  console.log("下载作业");
+  downloadAllDistributions()
+      .then((message) => {
+        console.log(message);
+      })
+      .catch((error) => {
+        console.error('Download failed', error);
+      });
+}
+
 </script>
 
 <template>
@@ -53,6 +64,11 @@ function getMyDistributions(){
 
         <el-main style="display:flex">
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
+            <div className="scrollbar-demo-item" >
+                  待批改作业
+              <el-button type="primary" @click="downloadTh()" style="margin-left: auto">全部下载</el-button>
+            </div>
+
             <div className="scrollbar-demo-item" v-for="item in homeworks">
               <el-icon>
                 <Document/>

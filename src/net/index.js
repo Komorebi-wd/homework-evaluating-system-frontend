@@ -130,6 +130,29 @@ function getDistributions() {
     });
 }
 
+//查询我的所有提交记录
+function getMyMarksWithCidThId(cid,thId){
+    return new Promise((resolve, reject) => {
+        get('/api/student/course/'+cid+'/tHomework/'+thId+'/mark/getAll', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+//查询指定ShId的被批改记录
+function getAllMarksWithShId(shId){
+    return new Promise((resolve, reject) => {
+        get('/api/student/course/tHomework/sHomework'+shId+'/mark/getAll', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+
 function getAllCoursesByTid() {
     return new Promise((resolve, reject) => {
         get('/api/teacher/course/getAll', (data) => {
@@ -260,6 +283,25 @@ function downloadShWithShId(shId) {
     });
 }
 
+//一键下载所有被分配的待批改作业
+function downloadAllDistributions() {
+    return new Promise((resolve, reject) => {
+        getForDownload('/api/student/distribution/downloadAll', response => {
+            const contentDisposition = response.headers['content-disposition'];
+            const filename = getFilenameFromContentDisposition(contentDisposition) || 'all-homeworks.zip';
+            const blobUrl = window.URL.createObjectURL(response.data);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(blobUrl);
+            console.log('Download successful');
+        },reject);
+    });
+}
+
 function putThWithCidEndDateComment(thId, cid, Date, comment,multipartFile) {
     const formData = new FormData();
     formData.append('thId', thId);
@@ -339,4 +381,5 @@ export { post, get, login, logout,
     showAllUnSubmitHomework,showOneHomework,downloadThWithCidThid,
     submitShWithSidCidThId,getAllCoursesByTid,getDistributions,
     putThWithCidEndDateComment,addMarkWithShIdCommentCommentIdScore,
-    getShWithShId,downloadShWithShId}
+    getShWithShId,downloadShWithShId,downloadAllDistributions,
+    getAllMarksWithShId,getMyMarksWithCidThId}
