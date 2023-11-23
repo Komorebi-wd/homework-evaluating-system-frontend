@@ -63,19 +63,13 @@ function internalGet(url, headers, success, failure, error = defaultError){
             console.log("成功")
             success(data.data)
         }
-            //success(data.data)
-            //return data.data;
+
         else{
             console.log("失败")
-            //console.log(data.code,data.data)
             failure(data.message, data.code, url)
         }
-            //failure(data.message, data.code, url)
     }).catch(err => error(err))
 }
-
-
-
 
 
 function login(username, password, remember, success, failure = defaultFailure){
@@ -90,12 +84,9 @@ function login(username, password, remember, success, failure = defaultFailure){
         success(data)
     }, failure)
 }
-// function showAllHomework(success, failure = defaultFailure){
-//     return new Promise=(resolve,reject)=>{
-//
-//     }
-// }
+
 function post(url, data, success, failure = defaultFailure) {
+    //他应该是先调post 然后再调interpost
     internalPost(url, data, accessHeader() , success, failure)
 }
 
@@ -115,6 +106,44 @@ function showClasses() {
         }, (error) => {
             reject(error);
 
+        });
+    });
+}
+export function showPersonInfo() {
+    return new Promise((resolve, reject) => {
+        get('/api/test/myDetail', (data) => {
+            console.log("data是什么"+data)
+            resolve(data);
+        }, (error) => {
+            reject(error);
+
+        });
+    });
+}
+
+export function changeUsername(username) {
+    const formData = new FormData();
+    formData.append('newName', username);
+
+    return new Promise((resolve, reject) => {
+        post('/api/test/changeUsername', formData, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+
+}
+export function changeUserPassword(oldPassword,newPassword) {
+    const formData = new FormData();
+    formData.append('oldPassword', oldPassword);
+    formData.append('newPassword', newPassword);
+
+    return new Promise((resolve, reject) => {
+        post('/api/test/changePassword', formData, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
         });
     });
 }

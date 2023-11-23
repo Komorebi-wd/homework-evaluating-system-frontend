@@ -52,7 +52,7 @@ watch(homework, (newValue) => {
   console.log(newValue.fileData);
   if(newValue && newValue.fileData && newValue.fileType) {
     switch(newValue.fileType) {
-      case 'png':
+      case 'png':0
         console.log("case里的"+newValue.fileType);
         // 将数字对象映射转换为字节数组
         let byteArray = new Uint8Array(Object.values(newValue.fileData));
