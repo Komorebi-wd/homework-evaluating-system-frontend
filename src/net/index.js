@@ -181,6 +181,16 @@ function getAllMarksWithShId(shId){
     });
 }
 
+function getMarkWithMid(mid){
+    return new Promise((resolve, reject) => {
+        get('/api/student/course/tHomework/sHomework/mark/'+mid, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
 
 function getAllCoursesByTid() {
     return new Promise((resolve, reject) => {
@@ -411,4 +421,4 @@ export { post, get, login, logout,
     submitShWithSidCidThId,getAllCoursesByTid,getDistributions,
     putThWithCidEndDateComment,addMarkWithShIdCommentCommentIdScore,
     getShWithShId,downloadShWithShId,downloadAllDistributions,
-    getAllMarksWithShId,getMyMarksWithCidThId}
+    getAllMarksWithShId,getMyMarksWithCidThId,getMarkWithMid}

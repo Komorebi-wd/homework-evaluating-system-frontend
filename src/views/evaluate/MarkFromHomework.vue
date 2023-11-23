@@ -3,19 +3,21 @@ import Sider from "@/views/elements/Sider.vue";
 import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
 import { onMounted, ref} from "vue";
-import {showAllHomework,downloadThWithCidThid} from "@/net";
+import {showAllHomework,downloadThWithCidThid,getMyMarksWithCidThId} from "@/net";
 
 const courseId = ref(0);
+const thId = ref(0);
 const courseName = ref('');
 const works= ref([]);
 onMounted(() => {
   courseId.value = router.currentRoute.value.query.cid;
+  thId.value = router.currentRoute.value.query.thId;
   courseName.value = router.currentRoute.value.query.cname;
   getClasses()
 });
 
 function getClasses(){
-  showAllHomework(courseId.value)
+  getMyMarksWithCidThId(courseId.value,thId.value)
       .then((data) => {
         works.value = data;
       })
@@ -23,26 +25,14 @@ function getClasses(){
       });
 }
 
-function downloadTh(cid, thId) {
-  console.log("下载作业");
-  downloadThWithCidThid(cid, thId)
-      .then((message) => {
-        console.log(message);
-      })
-      .catch((error) => {
-        console.error('Download failed', error);
-      });
-}
-
-
-
-const goToPage = (cid,thId)  => {
+const goToPage = (cid,thId,mid)  => {
   router.push({
-    path: '/markFromHomework',
+    path: '/mark',
     query: {
       cid: cid,
       thId: thId,
-      cname: courseName.value
+      cname: courseName.value,
+      mid: mid
     }
   });
 };
@@ -82,10 +72,10 @@ const goToPage = (cid,thId)  => {
             <div class="scrollbar-demo-item" v-for="item in works" style="display: flex; justify-content: space-between; align-items: center;">
               <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
                 <el-icon><Document /></el-icon>
-                第{{item.thId%10}}次作业
+                {{item.comment}}
               </div>
               <div>
-                <el-button type="primary" @click="goToPage(item.cid,item.thId)">查看批改记录</el-button>
+                <el-button @click="goToPage(courseId,thId,item.mid)" type="primary"  >查看详情</el-button>
               </div>
             </div>
           </el-scrollbar>

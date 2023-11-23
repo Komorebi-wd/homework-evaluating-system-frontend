@@ -88,6 +88,16 @@ const router = createRouter({
             path:'/markFromCourse',
             name:'markFromCourse',
             component:()=>import('@/views/evaluate/MarkFromCoursePage.vue')
+        },
+        {
+            path:'/markFromHomework',
+            name:'markFromHomework',
+            component:()=>import('@/views/evaluate/MarkFromHomework.vue')
+        },
+        {
+            path:'/mark',
+            name:'mark',
+            component:()=>import('@/views/evaluate/MarkPage.vue')
         }
 
     ]
