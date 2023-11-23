@@ -109,6 +109,18 @@ function showClasses() {
         });
     });
 }
+
+function getAllCourses(){
+    return new Promise((resolve, reject) => {
+        get('/api/student/course/getAll', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+
+        });
+    });
+}
+
 export function showPersonInfo() {
     return new Promise((resolve, reject) => {
         get('/api/test/myDetail', (data) => {
@@ -341,6 +353,20 @@ function downloadAllDistributions() {
     });
 }
 
+//学生选课
+function addScWithSidCid(cid){
+    const formData = new FormData();
+    formData.append('cid', cid);
+    return new Promise((resolve, reject) => {
+        post('/api/student/course/addSc', formData, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+
 function putThWithCidEndDateComment(thId, cid, Date, comment,multipartFile) {
     const formData = new FormData();
     formData.append('thId', thId);
@@ -421,4 +447,5 @@ export { post, get, login, logout,
     submitShWithSidCidThId,getAllCoursesByTid,getDistributions,
     putThWithCidEndDateComment,addMarkWithShIdCommentCommentIdScore,
     getShWithShId,downloadShWithShId,downloadAllDistributions,
-    getAllMarksWithShId,getMyMarksWithCidThId,getMarkWithMid}
+    getAllMarksWithShId,getMyMarksWithCidThId,getMarkWithMid,
+    getAllCourses,addScWithSidCid}

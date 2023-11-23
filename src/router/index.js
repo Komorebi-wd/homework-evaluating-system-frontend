@@ -98,6 +98,11 @@ const router = createRouter({
             path:'/mark',
             name:'mark',
             component:()=>import('@/views/evaluate/MarkPage.vue')
+        },
+        {
+            path:'/allClass',
+            name:'allClass',
+            component:()=>import('@/views/class/AllClassPage.vue')
         }
 
     ]

@@ -3,7 +3,7 @@ import {
   Document,
   Menu as IconMenu,
   Location,
-  Setting, Star, Avatar,
+  Setting, Star, Avatar, Box,
 } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router';
 import { ref } from 'vue'
@@ -45,24 +45,30 @@ const goToPage = (path) => {
     </el-menu-item>
     </router-link>
 
+    <el-menu-item index="3" @click="goToPage('/allClass')">
+      <el-icon><Box /></el-icon>
+      <span>选课管理</span>
+    </el-menu-item>
+
+
     <router-link to="/work">
-    <el-menu-item index="3" @click="goToPage('/work')" >
+    <el-menu-item index="4" @click="goToPage('/work')" >
         <el-icon><document /></el-icon>
          <span>作业平台</span>
     </el-menu-item>
     </router-link>
 
-    <el-menu-item index="4" @click="goToPage('/evaluatePlatform')">
+    <el-menu-item index="5" @click="goToPage('/evaluatePlatform')">
       <el-icon><setting /></el-icon>
       <span>批改平台</span>
     </el-menu-item>
 
-    <el-menu-item index="5" @click="goToPage('/course')">
+    <el-menu-item index="6" @click="goToPage('/course')">
       <el-icon><Star /></el-icon>
       <span>成绩统计</span>
     </el-menu-item>
 
-    <el-menu-item index="6" @click="goToPage('/teachCourse')">
+    <el-menu-item index="7" @click="goToPage('/teachCourse')">
       <el-icon><Avatar /></el-icon>
       <span>教学平台</span>
     </el-menu-item>

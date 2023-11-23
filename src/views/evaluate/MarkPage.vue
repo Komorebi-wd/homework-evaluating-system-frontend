@@ -3,9 +3,8 @@ import {ref, onMounted, watch} from 'vue';
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import router from "@/router";
-import {showOneHomework,submitShWithSidCidThId,getMarkWithMid} from "@/net";
-import {downloadThWithCidThid} from "@/net";
-import type { UploadProps, UploadUserFile } from 'element-plus'
+import {getMarkWithMid} from "@/net";
+
 
 import mammoth from 'mammoth';
 
