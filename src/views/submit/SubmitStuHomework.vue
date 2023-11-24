@@ -8,6 +8,7 @@ import {downloadThWithCidThid} from "@/net";
 import type { UploadProps, UploadUserFile } from 'element-plus'
 
 import mammoth from 'mammoth';
+import {ElMessage} from "element-plus";
 
 
 let comment = ref('');
@@ -140,10 +141,12 @@ function submit() {
 
   submitShWithSidCidThId(courseId.value, thId.value, comment.value,files)
       .then((message) => {
+        ElMessage.success("提交作业成功")
         //console.log("提交成功", message);
         // 这里处理提交成功后的逻辑
       })
       .catch((error) => {
+        ElMessage.error("提交作业失败")
         //console.error("提交失败", error);
         // 这里处理提交失败的逻辑
       });

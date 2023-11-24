@@ -5,7 +5,7 @@ import Sider from "@/views/elements/Sider.vue";
 import {addMarkWithShIdCommentCommentIdScore, getShWithShId,downloadShWithShId} from "@/net";
 import router from "@/router";
 import mammoth from 'mammoth';
-import {UploadProps, UploadUserFile} from "element-plus";
+import {ElMessage, UploadProps, UploadUserFile} from "element-plus";
 let comment = ref('');
 const homework = ref([]) as any;
 const empty = () => {
@@ -129,10 +129,12 @@ const submit = () => {
   addMarkWithShIdCommentCommentIdScore(shId.value,comment.value,score.value,file)
       .then((message) => {
         console.log("提交成功", message);
+        ElMessage.success("提交批改成功")
         // 这里处理提交成功后的逻辑
       })
       .catch((error) => {
         console.error("提交失败", error);
+        ElMessage.error("提交批改失败")
         // 这里处理提交失败的逻辑
       });
 };
@@ -170,7 +172,7 @@ const setScore = (num) => {
                   <el-button class="button" type="primary" style="margin-left: 480px;margin-bottom: 10px" @click="downloadTh()">下载此待批改作业</el-button>
                 </div>
 
-                <span>{{homework.comment}}</span>
+<!--                <span>{{homework.comment}}</span>-->
                 <div class="homework-display " v-html="homeworkDisplay"></div>
                 <!-- 在线展示作业内容的区域 -->
 <!--                                  <span>{{ courseName }}课的第{{ thId%10}}次作业的内容</span>-->

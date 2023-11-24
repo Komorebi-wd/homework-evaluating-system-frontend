@@ -123,14 +123,16 @@ function determineFileType(blob) {
           <!--          <div class="homework-info-display">-->
 
           <!--          </div>-->
-          <el-col span="4" >
+          <el-col span="8" >
             <el-card class="box-card" style="margin-left: auto;display: flex">
               <template #header>
                 <div class="card-header" >
+                  <div style="margin-left: 45px">本次作业得分：{{homework.score}}</div>
 <!--                  <span>{{ courseName }}课的第{{ thId%10}}次作业</span>-->
 <!--                  <el-button class="button" type="primary" style="margin-left: 320px;margin-bottom: 10px" @click="downloadTh(courseId,thId)">下载本次作业</el-button>-->
                 </div>
-                <div class="homework-display " v-html="homeworkDisplay"></div>
+
+                <div class="homework-display "  v-html="homeworkDisplay"></div>
                 <!-- 在线展示作业内容的区域 -->
                 <!--                  <span>{{ courseName }}课的第{{ thId%10}}次作业的内容</span>-->
                 <!--                </div>-->
@@ -139,11 +141,13 @@ function determineFileType(blob) {
               <div class="comment-container vertical-section">
 
                 <div class="comment-section" >
-
-                  <!-- 文字输入框，用于输入作业内容 -->
-                  <el-input type="textarea" v-model="comment" :rows="10" size="large" placeholder="请输入你的答案" ref="commentInput"  clearable>
-
-                  </el-input>
+<!--                  <el-card class="box-card">-->
+<!--                    <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>-->
+<!--                  </el-card>-->
+<!--                   这里是你对本次批改作业的评论-->
+<!--                  <el-input type="textarea" v-model="comment" :rows="10" size="large" ref="commentInput"  clearable>-->
+<!--                        哈哈哈-->
+<!--                  </el-input>-->
 
                 </div>
               </div>
@@ -182,9 +186,10 @@ function determineFileType(blob) {
   display: flex; /* 设置为 flex 布局以横向排列按钮 */
 }
 .homework-display{
-  width: 730px;
+  width: 1200px;
   height: 550px;
   border: 1px solid #ccc;
+  margin-left: 45px;
   margin-bottom: 20px;
   padding: 20px; /* 内边距 */
   box-sizing: border-box;
@@ -215,5 +220,6 @@ function determineFileType(blob) {
   display: flex;
   justify-content: center;
 }
+
 
 </style>

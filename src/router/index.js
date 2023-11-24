@@ -104,7 +104,6 @@ const router = createRouter({
             name:'allClass',
             component:()=>import('@/views/class/AllClassPage.vue')
         }
-
     ]
 
 })
