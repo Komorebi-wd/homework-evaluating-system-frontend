@@ -103,6 +103,16 @@ const router = createRouter({
             path:'/allClass',
             name:'allClass',
             component:()=>import('@/views/class/AllClassPage.vue')
+        },
+        {
+            path:'/showHWScore',
+            name:'score-showHWScore',
+            component:()=>import('@/views/Score/ShowHWScore.vue')
+        },
+        {
+            path:'/showCourse',
+            name:'score-showCourse',
+            component:()=>import('@/views/Score/ShowCourse.vue')
         }
 
     ]
