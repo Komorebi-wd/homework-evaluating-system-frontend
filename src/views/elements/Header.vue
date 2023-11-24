@@ -8,7 +8,9 @@ import router from "@/router";
 
 const personInfo = ref([]);
 const dialogVisible = ref(false);
-
+const cancel = () => {
+  router.go(-1); // 后退到上一个页面
+};
 function getPersonInfo() {
   showPersonInfo()
       .then((data) => {
@@ -94,6 +96,7 @@ function userLogout() {
 <template>
   <h5 style="text-align: center; font-size: large">同伴作业互评系统</h5>
   <div style="display: flex; justify-content: flex-end; align-items: center;">
+    <el-button type="default" @click="cancel">返回</el-button>
     <el-button type="primary" @click="dialogVisible=true">用户中心</el-button>
     <el-button type="info" @click="userLogout">退出登录</el-button>
   </div>

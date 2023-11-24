@@ -76,6 +76,7 @@ const goToPage = (cid,cname)  => {
   height: 50px;
   margin: 10px;
   text-align: center;
+  padding-left: 20px; /* 增加左侧内边距以避免遮挡 */
   border-radius: 4px;
   background: var(--el-color-primary-light-9);
   color: var(--el-color-primary);

@@ -15,6 +15,9 @@ const empty = () => {
   comment.value = '';
 
 };
+const cancel = () => {
+  router.go(-1); // 后退到上一个页面
+};
 const shId = ref(0) as any;
 const Date = ref('') as any;
 const score = ref(0) as any;
@@ -162,9 +165,12 @@ const setScore = (num) => {
             <el-card class="box-card" style="margin-left: auto;display: flex">
               <template #header>
                 <div class="card-header" >
+                  <span>作业内容</span>
 <!--                  <span>{{ courseName }}课的第{{ thId%10}}次作业</span>-->
-                  <el-button class="button" type="primary" style="margin-left: 320px;margin-bottom: 10px" @click="downloadTh()">下载此待批改作业</el-button>
+                  <el-button class="button" type="primary" style="margin-left: 480px;margin-bottom: 10px" @click="downloadTh()">下载此待批改作业</el-button>
                 </div>
+
+                <span>{{homework.comment}}</span>
                 <div class="homework-display " v-html="homeworkDisplay"></div>
                 <!-- 在线展示作业内容的区域 -->
 <!--                                  <span>{{ courseName }}课的第{{ thId%10}}次作业的内容</span>-->
@@ -181,7 +187,7 @@ const setScore = (num) => {
 
                   <div class="score-section ">
                     <!-- 0到10的数字按钮用于选择得分 -->
-                    <el-button-group>
+                    <el-button-group size="large">
                       <el-button v-for="num in 10" :key="num" @click="setScore(num)">{{ num }}</el-button>
                     </el-button-group>
                   </div>
@@ -210,7 +216,7 @@ const setScore = (num) => {
 
           <div class="action-buttons">
             <!-- 取消和提交按钮 -->
-            <el-button type="default"  >取消</el-button>
+            <el-button type="default" @click="cancel" >取消</el-button>
             <el-button type="primary" @click="submit()">提交</el-button>
           </div>
         </div>
@@ -222,7 +228,11 @@ const setScore = (num) => {
 
 <style scoped>
 /* 样式部分 */
-
+.score-section{
+  margin-top: 20px;
+  margin-left: 65px;
+  margin-bottom: 20px;
+}
 .content-container{
   margin-left: auto;
   margin-right: auto;

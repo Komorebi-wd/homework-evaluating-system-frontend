@@ -12,16 +12,17 @@
 
         <el-main style="display: flex">
 
-          <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
+          <el-scrollbar class="el-scrollbar" max-height="100vh" style="width: 700px;height: 100vh">
 
             <div class="scrollbar-demo-item">
-              <el-icon><Document /></el-icon>
-
+              <el-icon class="el-icon"><Document /></el-icon>
+              {{"待批改作业"}}
               <el-button type="primary" @click="goToPage('/evaluateHomework')" style="margin-left: auto" >前往批改</el-button>
             </div>
 
             <div class="scrollbar-demo-item">
-              <el-icon><Document /></el-icon>
+              <el-icon class="el-icon"><Document /></el-icon>
+              {{"已批改记录"}}
               <el-button type="primary" @click="goToPage('/evaluateRecords')" style="margin-left: auto" >批改记录</el-button>
             </div>
 
@@ -55,13 +56,26 @@ const goToPage = (path) => {
 .scrollbar-demo-item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start; /* 从左侧开始排列内容 */
   height: 50px;
   margin: 10px;
-  text-align: center;
+  padding-left: 20px; /* 增加左侧内边距以避免遮挡 */
+  text-align: left; /* 文字对齐到左侧 */
   border-radius: 4px;
   background: var(--el-color-primary-light-9);
   color: var(--el-color-primary);
+  overflow: hidden; /* 防止内容溢出 */
+  white-space: nowrap; /* 避免文字换行 */
+}
+
+.el-icon {
+  margin-right: 10px; /* 为图标和文字之间添加间隙 */
+}
+
+.el-scrollbar {
+  width: calc(100% - 240px); /* 调整滚动条宽度以适应侧边栏 */
+  height: 100vh;
+  overflow-x: hidden; /* 隐藏水平滚动条 */
 }
 
 .my-calendar {
