@@ -20,7 +20,7 @@ const cancel = () => {
 };
 const shId = ref(0) as any;
 const Date = ref('') as any;
-const score = ref(0) as any;
+const score = ref('') as any;
 onMounted(() => {
    shId.value = router.currentRoute.value.query.shId;
    Date.value = router.currentRoute.value.query.submitTime;
@@ -185,11 +185,10 @@ const setScore = (num) => {
                   <el-input type="textarea" v-model="comment" :rows="10" size="large" placeholder="请输入你的批改意见，并给出相应分数" ref="commentInput"  clearable>
                   </el-input>
 
-                  <div class="score-section ">
-                    <!-- 0到10的数字按钮用于选择得分 -->
-                    <el-button-group size="large">
-                      <el-button v-for="num in 10" :key="num" @click="setScore(num)">{{ num }}</el-button>
-                    </el-button-group>
+                  <div class="score-section">
+                    <!-- 用输入分数的输入框替换按钮组 -->
+                    <span>输入本次作业分数：</span>
+                    <el-input v-model="score" type="number" size="large" style="width: 160px;"></el-input>
                   </div>
 
                   <div class="button-container">
@@ -230,7 +229,7 @@ const setScore = (num) => {
 /* 样式部分 */
 .score-section{
   margin-top: 20px;
-  margin-left: 65px;
+  /*margin-left: 65px;*/
   margin-bottom: 20px;
 }
 .content-container{
