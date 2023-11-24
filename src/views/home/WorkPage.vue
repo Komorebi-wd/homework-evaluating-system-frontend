@@ -2,7 +2,7 @@
 
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
-import {Document} from "@element-plus/icons-vue";
+import {Document, Timer} from "@element-plus/icons-vue";
 import router from "@/router";
 
 import {onMounted, ref} from "vue";
@@ -76,7 +76,7 @@ const goToPage = (cid,thId,cname)  => {
 <!--          </el-scrollbar>-->
           <el-table :data="works"  :default-sort="{ prop: 'date', order: 'descending' }" stripe style="width: 100%">
             <!-- 截止日期列 -->
-            <el-table-column label="截止日期" sortable width="250">
+            <el-table-column label="截止日期" sortable width="200">
               <template #default="scope">
                 <el-icon><Timer /></el-icon>
                 <span>{{ scope.row.endTime }}</span>
@@ -84,7 +84,7 @@ const goToPage = (cid,thId,cname)  => {
             </el-table-column>
 
             <!-- 文件名列 -->
-            <el-table-column label="文件名" width="300">
+            <el-table-column label="文件名" width="260">
               <template #default="scope">
                 <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
                   <el-icon><Document /></el-icon>
@@ -94,7 +94,7 @@ const goToPage = (cid,thId,cname)  => {
             </el-table-column>
 
             <!-- 课程名列 -->
-            <el-table-column label="课程" width="200">
+            <el-table-column label="课程" width="180">
               <template #default="scope">
                 <span>{{ scope.row.cname }}</span>
               </template>

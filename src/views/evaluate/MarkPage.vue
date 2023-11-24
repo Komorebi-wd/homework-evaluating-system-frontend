@@ -21,14 +21,16 @@ onMounted(() => {
   thId.value = router.currentRoute.value.query.thId;
   courseName.value = router.currentRoute.value.query.cname;
   mid.value = router.currentRoute.value.query.mid;
-  getHomework(mid.value)
+  getHomework()
 
 });
 
-function getHomework(mid){
+function getHomework(){
   console.log("获取作业");
-  getMarkWithMid(mid)
+  console.log(mid.value);
+  getMarkWithMid(mid.value)
       .then((data) => {
+
         homework.value = data;
         console.log(homework.value);
       })

@@ -174,8 +174,10 @@ function getDistributions() {
 //查询我的所有提交记录
 function getMyMarksWithCidThId(cid,thId){
     return new Promise((resolve, reject) => {
-        get('/api/student/course/'+cid+'/tHomework/'+thId+'/mark/getAll', (data) => {
+        get('/api/student/course/'+cid+'/tHomework/'+thId%10+'/mark/getAll', (data) => {
+            console.log("开始查询")
             resolve(data);
+            console.log("查询成功")
         }, (error) => {
             reject(error);
         });
@@ -194,9 +196,12 @@ function getAllMarksWithShId(shId){
 }
 
 function getMarkWithMid(mid){
+    console.log("mid是什么"+mid)
     return new Promise((resolve, reject) => {
         get('/api/student/course/tHomework/sHomework/mark/'+mid, (data) => {
+            console.log("开始查询批改作业")
             resolve(data);
+            console.log("查询成功")
         }, (error) => {
             reject(error);
         });

@@ -18,11 +18,25 @@ const thId = ref(0);
 const courseName = ref('');
 const works= ref([]);
 onMounted(() => {
+  getPersonInfo()
   courseId.value = router.currentRoute.value.query.cid;
   thId.value = router.currentRoute.value.query.thId;
   courseName.value = router.currentRoute.value.query.cname;
   getClasses()
 });
+
+function getClasses(){
+  getMyMarksWithCidThId(courseId.value,thId.value)
+      .then((data) => {
+        works.value = data;
+        console.log(courseId.value)
+        console.log(thId.value)
+        console.log("批改记录如下：")
+        console.log(data)
+      })
+      .catch((error) => {
+      });
+}
 
 const personInfo = ref([]);
 const dialogVisible = ref(false);
@@ -96,11 +110,6 @@ function changePassword() {
 }
 
 
-onMounted(() => {
-  console.log("onMounted")
-  getPersonInfo()
-});
-
 function userLogout() {
 // 删除 token
   localStorage.removeItem('token'); // 假设 token 存储在 localStorage
@@ -109,15 +118,6 @@ function userLogout() {
   // 路由跳转到首页或登录页
   router.push('/'); // 假设 '/' 是首页或登录页的路由
 }
-function getClasses(){
-  getMyMarksWithCidThId(courseId.value,thId.value)
-      .then((data) => {
-        works.value = data;
-      })
-      .catch((error) => {
-      });
-}
-
 const goToPage = (cid,thId,mid)  => {
   router.push({
     path: '/mark',
