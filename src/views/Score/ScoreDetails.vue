@@ -13,11 +13,20 @@
         <el-main style="display: flex">
 
           <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
+            <div class="scrollbar-demo-item" >
+                作业名称
+              <div style="margin-left: auto">
+                作业分数
+              </div>
+            </div>
 
-            <div class="scrollbar-demo-item" v-for="item in classes" :key="item.id">
-              <el-icon><House /></el-icon>
-              {{item.cname}}
-              <el-button type="primary" style="margin-left: auto"  @click="goToPage(item.cid,item.cname)" >查看成绩</el-button>
+            <div class="scrollbar-demo-item" v-for="(item,index) in works" :key="item.id">
+              <el-icon><Document /></el-icon>
+              {{item.fileName}}
+
+              <div style="margin-left: auto">
+                {{scoreList[index]}}
+              </div>
             </div>
 
           </el-scrollbar>
@@ -34,37 +43,51 @@ import router from "@/router";
 import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {onMounted, ref} from 'vue'
-import {House} from "@element-plus/icons-vue";
-import {getAllCoursesByTid} from "@/net";
+import {Document} from "@element-plus/icons-vue";
+import {getThsWithTidCid,getAvgScoreMarkWithSidThId} from "@/net";
 
 // 定义响应式变量来保存课程列表
-const classes = ref([]);
+const scoreList = ref([]);
+const cid = ref(0);
+const works=ref([]);
+const sid = ref(0);
 
-function getClasses(){
-  getAllCoursesByTid()
+function getAvgScore(thId){
+  getAvgScoreMarkWithSidThId(sid.value, cid.value,thId)
       .then((data) => {
-        classes.value = data;
-        //console.log(data)
+        console.log("第"+thId+"次作业的分数为："+data)
+        scoreList.value.push(data);
       })
       .catch((error) => {
         console.error(error);
       });
 }
 
+function getScoreList(){
+    for (let i = 0; i < works.value.length; i++) {
+    getAvgScore(works.value[i].thId%10)
+  }
+}
+
+
+function getAllWorks(){
+  getThsWithTidCid(cid.value)
+      .then((data) => {
+        works.value = data;
+        getScoreList()
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+}
+
+
 //在页面加载前获取课程信息
 onMounted(() => {
-  getClasses()
+  cid.value = router.currentRoute.value.query.cid;
+  sid.value = router.currentRoute.value.query.sid;
+  getAllWorks()
 });
-const goToPage = (cid,cname)  => {
-  router.push({
-    path: '/showHWScore',
-    query: {
-      cid: cid,
-      cname: cname
-    }
-  });
-};
-
 
 </script>
 
@@ -73,6 +96,7 @@ const goToPage = (cid,cname)  => {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-left: 20px; /* 增加左侧内边距以避免遮挡 */
   height: 50px;
   margin: 10px;
   text-align: center;
@@ -88,9 +112,6 @@ const goToPage = (cid,cname)  => {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 </style>
-
-
-
 
 
 

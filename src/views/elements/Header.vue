@@ -79,7 +79,7 @@ function changePassword() {
 
 
 onMounted(() => {
-  console.log("onMounted")
+  //console.log("onMounted")
   getPersonInfo()
 });
 

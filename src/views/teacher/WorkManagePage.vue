@@ -4,7 +4,7 @@ import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import { reactive } from 'vue'
 import router from "@/router";
-import {UploadProps, UploadUserFile} from "element-plus";
+import {ElMessage, UploadProps, UploadUserFile} from "element-plus";
 import{putThWithCidEndDateComment} from "@/net";
 // do not use same name with ref
 const form = reactive({
@@ -23,8 +23,10 @@ const onSubmit = () => {
   putThWithCidEndDateComment(num.value,courseId.value,form.date,form.comment,file)
       .then((message) => {
         console.log(message);
+        ElMessage.success("发布作业成功")
       })
       .catch((error) => {
+        ElMessage.error("发布作业失败")
         console.error('发布作业失败', error);
       });
 }

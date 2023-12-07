@@ -3,23 +3,18 @@ import Sider from "@/views/elements/Sider.vue";
 import {Document, Timer} from "@element-plus/icons-vue";
 import router from "@/router";
 import { onMounted, ref} from "vue";
-import {showAllHomework, downloadThWithCidThid, showPersonInfo, changeUsername, changeUserPassword} from "@/net";
+import {showAllHomework,getAvgTotalScoresWithCidTid, showPersonInfo, changeUsername, changeUserPassword} from "@/net";
 import {ElMessageBox} from "element-plus";
 
 const courseId = ref(0);
 const courseName = ref('');
-const works= ref([]);
-onMounted(() => {
-  courseId.value = router.currentRoute.value.query.cid;
-  courseName.value = router.currentRoute.value.query.cname;
-  getClasses()
-});
-
+const Scores= ref([]);
 const personInfo = ref([]);
 const dialogVisible = ref(false);
 const cancel = () => {
   router.go(-1); // 后退到上一个页面
 };
+
 function getPersonInfo() {
   showPersonInfo()
       .then((data) => {
@@ -30,7 +25,6 @@ function getPersonInfo() {
         console.error(error);
       });
 }
-
 function changeName() {
   console.log("修改用户名")
   ElMessageBox.prompt('请输入新的用户名，修改之后需要重新登陆', '提示', {
@@ -89,8 +83,11 @@ function changePassword() {
 }
 
 onMounted(() => {
-  console.log("onMounted")
+  //console.log("onMounted")
   getPersonInfo()
+  courseId.value = router.currentRoute.value.query.cid;
+  courseName.value = router.currentRoute.value.query.cname;
+  getScores()
 });
 
 function userLogout() {
@@ -101,53 +98,23 @@ function userLogout() {
   // 路由跳转到首页或登录页
   router.push('/'); // 假设 '/' 是首页或登录页的路由
 }
-function getClasses(){
-  showAllHomework(courseId.value)
+
+function getScores(){
+  getAvgTotalScoresWithCidTid(courseId.value)
       .then((data) => {
-        works.value = data;
-         console.log(works);
+        Scores.value = data;
+         console.log(Scores);
       })
       .catch((error) => {
       });
 }
-function sortWorksByDate() {
-  new Promise((resolve, reject) => {
-    try {
-      console.log("排序")
-      const sorted = [works].sort((a, b) => new Date(b.endTime) - new Date(a.endTime));
-      resolve(sorted);
-    } catch (error) {
-      reject(error);
-    }
-  })
-      .then((sortedData) => {
-        this.sortedWorks = sortedData;
-      })
-      .catch((error) => {
-        console.error('排序出错:', error);
-      });
-}
 
-function downloadTh(cid, thId) {
-  console.log("下载作业");
-  downloadThWithCidThid(cid, thId)
-      .then((message) => {
-        console.log(message);
-      })
-      .catch((error) => {
-        console.error('Download failed', error);
-      });
-}
-
-
-
-const goToPage = (cid,thId)  => {
+const goToPage = (cid,sid)  => {
   router.push({
-    path: '/submitStuHomework',
+    path: '/scoreDetails',
     query: {
-      cid: cid,
-      thId: thId,
-      cname: courseName.value
+      sid: sid,
+      cid: cid
     }
   });
 };
@@ -203,87 +170,52 @@ const goToPage = (cid,thId)  => {
         </el-aside>
 
         <el-main style="display:flex">
-          <!--          <div class="scrollbar+card">-->
-          <!--          <el-card class="box-card" style="margin-left: 10px" >-->
-          <!--              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">-->
-          <!--                作业列表-->
-          <!--              </div>-->
-          <!--          </el-card>-->
-          <!--          <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">-->
 
-          <!--            <div class="scrollbar-demo-item" v-for="item in works" style="display: flex; justify-content: space-between; align-items: center;">-->
-          <!--              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">-->
-          <!--                <el-icon><Document /></el-icon>-->
-          <!--                {{item.fileName}}-->
-          <!--              </div>-->
-          <!--              <div>-->
-          <!--                <el-button type="primary" @click="downloadTh(item.cid,item.thId)">下载</el-button>-->
-          <!--                <el-button type="primary" @click="goToPage(item.cid,item.thId)">提交</el-button>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </el-scrollbar>-->
-          <el-table :data="works" stripe style="width: 100%">
-            <!-- 截止日期列 -->
-            <el-table-column label="截止日期" width="250">
+          <!--列表显示速度正常-->
+          <el-table :data="Scores" stripe style="width: 100%">
+            <!-- 学号列 -->
+            <el-table-column label="学号" width="250">
               <template #default="scope">
                 <div style="display: flex; align-items: center">
                   <el-icon><Timer /></el-icon>
-                  <span style="margin-left: 10px">{{ scope.row.endTime }}</span>
+                  <span  >{{ scope.row.sid }}</span>
                 </div>
               </template>
             </el-table-column>
 
-            <!-- 文件名列 -->
-            <el-table-column label="文件名" width="380">
+            <!-- 姓名列 -->
+            <el-table-column label="姓名" width="280">
               <template #default="scope">
                 <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
                   <el-icon><Document /></el-icon>
-                  <span style="margin-left: 10px">{{ scope.row.fileName }}</span>
+                  <span >{{ scope.row.sname }}</span>
                 </div>
               </template>
             </el-table-column>
 
-            <el-table-column label="学生" width="380">
-              <template #default="scope">
-                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
-<!--                  <el-icon><Document /></el-icon>-->
-                  <span style="margin-left: 10px">{{ "21301055" }}</span>
-                </div>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="得分" width="380">
+            <!-- 成绩得分列 -->
+            <el-table-column label="得分" width="280">
               <template #default="scope">
                 <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
                   <!--                  <el-icon><Document /></el-icon>-->
-                  <span style="margin-left: 10px">{{ Math.floor(Math.random() * 101) }}</span>
+                  <span >{{ scope.row.score }}</span>
                 </div>
               </template>
             </el-table-column>
 
+            <!-- 详细成绩列 -->
+            <el-table-column label="详细成绩" width="280">
+              <template #default="scope">
+                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
+                  <!--                  <el-icon><Document /></el-icon>-->
+                  <span >
+                     <el-button type="primary" @click="goToPage(courseId,scope.row.sid)">查看详情</el-button>
+                  </span>
+                </div>
+              </template>
+            </el-table-column>
 
           </el-table>
-
-<!--          <el-table :data="personInfo" stripe style="width: 100%">-->
-<!--            &lt;!&ndash; 学生姓名列 &ndash;&gt;-->
-<!--            <el-table-column label="学生姓名" width="200">-->
-<!--              <template #default="scope">-->
-<!--                <span>{{ scope.row.username}}</span>-->
-<!--              </template>-->
-<!--            </el-table-column>-->
-
-<!--            &lt;!&ndash; 成绩得分列 &ndash;&gt;-->
-<!--            <el-table-column label="成绩得分" width="200">-->
-<!--              <template #default="scope">-->
-<!--                <span>{{ scope.row.score }}</span>-->
-<!--              </template>-->
-<!--            </el-table-column>-->
-
-<!--          </el-table>-->
-
-          <!--          </div>-->
-<!--          <el-calendar style="width: 600px;height: 550px" class="my-calendar" v-model="value" >-->
-<!--          </el-calendar>-->
 
         </el-main>
 

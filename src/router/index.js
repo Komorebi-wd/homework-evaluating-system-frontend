@@ -113,6 +113,11 @@ const router = createRouter({
             path:'/showCourse',
             name:'score-showCourse',
             component:()=>import('@/views/Score/ShowCourse.vue')
+        },
+        {
+            path:'/scoreDetails',
+            name:'score-scoreDetails',
+            component:()=>import('@/views/Score/ScoreDetails.vue')
         }
     ]
 

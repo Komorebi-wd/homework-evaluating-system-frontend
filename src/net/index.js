@@ -60,12 +60,12 @@ function internalPost(url, data, headers, success, failure, error = defaultError
 function internalGet(url, headers, success, failure, error = defaultError){
     axios.get(url, { headers: headers }).then(({data}) => {
         if(data.code === 200){
-            console.log("成功")
+            //console.log("成功")
             success(data.data)
         }
 
         else{
-            console.log("失败")
+            //console.log("失败")
             failure(data.message, data.code, url)
         }
     }).catch(err => error(err))
@@ -124,7 +124,7 @@ function getAllCourses(){
 export function showPersonInfo() {
     return new Promise((resolve, reject) => {
         get('/api/test/myDetail', (data) => {
-            console.log("data是什么"+data)
+            //console.log("data是什么"+data)
             resolve(data);
         }, (error) => {
             reject(error);
@@ -230,6 +230,7 @@ function showMyClasses() {
     });
 }
 
+//查询学生在指定课程的所有作业
 function showAllHomework(courseId) {
     return new Promise((resolve, reject) => {
         get('/api/student/course/'+courseId+'/tHomework/getAll', (data) => {
@@ -239,6 +240,17 @@ function showAllHomework(courseId) {
         });
     });
 }
+//查询老师在指定课程下布置的所有作业
+function getThsWithTidCid(cid) {
+    return new Promise((resolve, reject) => {
+        get('/api/teacher/course/'+cid+'/tHomework/getAll', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
 
 function showOneHomework(courseId,thId) {
     return new Promise((resolve, reject) => {
@@ -248,6 +260,35 @@ function showOneHomework(courseId,thId) {
             resolve(data);
             console.log("查询成功")
         }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+function getAvgTotalScoresWithCidTid(cid) {
+    return new Promise((resolve, reject) => {
+        get('/api/teacher/course/'+cid+'/getAllScore', (data) => {
+            console.log("开始查询")
+            resolve(data);
+            console.log("查询成功")
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+function getAvgScoreMarkWithSidThId(sid,cid,thId) {
+    return new Promise((resolve, reject) => {
+        get('/api/teacher/course/'+cid+'/tHomework/'+thId%10+'/student/'+sid+'/getScore', (data) => {
+            console.log("开始查询")
+            console.log(sid)
+            console.log(cid)
+            console.log(thId)
+            //console.log("开始查询")
+            resolve(data);
+            console.log("查询成功")
+        }, (error) => {
+            console.log("查询失败")
             reject(error);
         });
     });
@@ -268,8 +309,6 @@ function getShWithShId(shId) {
     });
 }
 
-
-
 function showAllUnSubmitHomework() {
     return new Promise((resolve, reject) => {
         get('/api/student/tHomework/unSubmit/getAll', (data) => {
@@ -279,7 +318,6 @@ function showAllUnSubmitHomework() {
         });
     });
 }
-
 
 function getForDownload(url, success, failure = defaultFailure) {
     internalGetForDownload(url, accessHeader(), success, failure)
@@ -453,4 +491,5 @@ export { post, get, login, logout,
     putThWithCidEndDateComment,addMarkWithShIdCommentCommentIdScore,
     getShWithShId,downloadShWithShId,downloadAllDistributions,
     getAllMarksWithShId,getMyMarksWithCidThId,getMarkWithMid,
-    getAllCourses,addScWithSidCid}
+    getAllCourses,addScWithSidCid,getAvgTotalScoresWithCidTid,
+    getAvgScoreMarkWithSidThId,getThsWithTidCid}
