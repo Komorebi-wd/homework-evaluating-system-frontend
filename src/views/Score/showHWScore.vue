@@ -226,6 +226,10 @@ const goToPage = (cid,sid)  => {
 </template>
 
 <style scoped>
+.dialog-footer button:first-child {
+  margin-left: 20px;
+  margin-right: 10px;
+}
 .scrollbar-demo-item {
   display: flex;
   align-items: center;

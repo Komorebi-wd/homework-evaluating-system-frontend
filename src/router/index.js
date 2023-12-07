@@ -118,6 +118,21 @@ const router = createRouter({
             path:'/scoreDetails',
             name:'score-scoreDetails',
             component:()=>import('@/views/Score/ScoreDetails.vue')
+        },
+        {
+            path:'/showDetectionCourse',
+            name:'detection-showDetectionCourse',
+            component:()=>import('@/views/detection/ShowDetectionCourse.vue')
+        },
+        {
+            path:'/showDetectionHomework',
+            name:'detection-showDetectionHomework',
+            component:()=>import('@/views/detection/ShowDetectionHomework.vue')
+        },
+        {
+            path:'/detectionDetails',
+            name:'detection-detectionDetails',
+            component:()=>import('@/views/detection/DetectionDetails.vue')
         }
     ]
 
