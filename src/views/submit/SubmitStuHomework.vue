@@ -78,14 +78,24 @@ watch(homework, (newValue) => {
         // 创建 Uint8Array 并转换为 ArrayBuffer
         const uint8Array = new Uint8Array(docxDataBytes);
         const arrayBuffer = uint8Array.buffer;
-
+        console.log("arrayBuffer:"+arrayBuffer);
         mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
             .then((result) => {
+              console.log("result:"+result);
               homeworkDisplay.value = result.value; // HTML 内容
               console.log(result.messages); // 可选：显示任何转换消息或警告
             })
             .catch((error) => {
               console.error('Error converting .docx to HTML:', error);
+            });
+        mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+            .then((result) => {
+              var text = result.value; // 提取的纯文本内容
+              console.log("Extracted Text:", text);
+              // 在这里，您可以将提取的文本用于查重或其他处理
+            })
+            .catch((error) => {
+              console.error('Error extracting text from .docx:', error);
             });
         break;
       default:

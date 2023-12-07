@@ -81,9 +81,11 @@ watch(homework, (newValue) => {
         // 创建 Uint8Array 并转换为 ArrayBuffer
         const uint8Array = new Uint8Array(docxDataBytes);
         const arrayBuffer = uint8Array.buffer;
+        console.log("arrayBuffer:"+arrayBuffer);
 
         mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
             .then((result) => {
+              console.log("result:"+result);
               homeworkDisplay.value = result.value; // HTML 内容
               console.log(result.messages); // 可选：显示任何转换消息或警告
             })
@@ -125,16 +127,26 @@ const handleChange = (value: number) => {
   console.log(value)
 }
 const submit = () => {
-  let file = fileList.value[0].raw
-  addMarkWithShIdCommentCommentIdScore(shId.value,comment.value,score.value,file)
+  let file = fileList.value[0].raw;
+  addMarkWithShIdCommentCommentIdScore(shId.value, comment.value, score.value, file)
       .then((message) => {
         console.log("提交成功", message);
-        ElMessage.success("提交批改成功")
-        // 这里处理提交成功后的逻辑
+
+        // 显示成功消息
+        ElMessage.success({
+          message: "提交批改成功",
+          duration: 1000 // 这里设置消息显示的时间为3000毫秒（3秒）
+        });
+
+        // 设置一个与消息显示时间匹配的延时，然后跳转回上一级
+        setTimeout(() => {
+          router.go(-1); // 或 router.back();
+        }, 1000);  // 确保这里的延时与消息显示时间相同
+
       })
       .catch((error) => {
         console.error("提交失败", error);
-        ElMessage.error("提交批改失败")
+        ElMessage.error("提交批改失败");
         // 这里处理提交失败的逻辑
       });
 };

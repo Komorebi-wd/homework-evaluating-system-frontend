@@ -21,7 +21,7 @@
             </div>
 
           </el-scrollbar>
-          <el-calendar style="width: 600px;height: 550px" class="my-calendar" v-model="value" />
+          <el-calendar style="width: 600px;height: 650px" class="my-calendar" v-model="value" />
         </el-main>
 
       </el-container>

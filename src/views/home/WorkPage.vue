@@ -8,14 +8,19 @@ import router from "@/router";
 import {onMounted, ref} from "vue";
 import {downloadThWithCidThid, showAllUnSubmitHomework} from "@/net";
 const works=ref([]);
+const loading = ref(false); // 添加一个变量来控制加载状态
+
 function getAllUnSubmitHomework(){
+  loading.value = true; // 开始加载数据时，设置loading为true
   showAllUnSubmitHomework()
       .then((data) => {
         works.value = data;
-        console.log(works.value)
+        loading.value = false; // 数据加载完成后，设置loading为false
+        // console.log(works.value)
       })
       .catch((error) => {
         console.error(error);
+        loading.value = false; // 出错时，也要确保设置loading为false
       });
 }
 
@@ -61,22 +66,13 @@ const goToPage = (cid,thId,cname)  => {
         </el-aside>
 
         <el-main style="display:flex">
-<!--          <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">-->
-<!--            <div class="scrollbar-demo-item" v-for="item in works" style="display: flex; justify-content: space-between; align-items: center;">-->
-<!--              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">-->
-<!--                <el-icon><Document /></el-icon>-->
-<!--                {{item.fileName}}-->
-<!--                {{item.cname}}-->
-<!--              </div>-->
-<!--              <div>-->
-<!--                <el-button type="primary" @click="downloadTh(item.cid,item.thId)">下载</el-button>-->
-<!--                <el-button type="primary" @click="goToPage(item.cid,item.thId,item.cname)">提交</el-button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </el-scrollbar>-->
-          <el-table :data="works"  :default-sort="{ prop: 'date', order: 'descending' }" stripe style="width: 100%">
+          <!-- 加载提示 -->
+          <div v-if="loading" style="display: flex; height: 100%; width: 100%;">
+            <p>加载中...</p>
+          </div>
+          <el-table :data="works"  v-loading="loading" stripe style="width: 100%">
             <!-- 截止日期列 -->
-            <el-table-column label="截止日期" sortable width="200">
+            <el-table-column label="截止日期" width="200">
               <template #default="scope">
                 <el-icon><Timer /></el-icon>
                 <span>{{ scope.row.endTime }}</span>
@@ -109,7 +105,7 @@ const goToPage = (cid,thId,cname)  => {
             </el-table-column>
           </el-table>
 
-          <el-calendar style="width: 600px;height: 550px" class="my-calendar" v-model="value" >
+          <el-calendar style="width: 600px;height: 650px" class="my-calendar" v-model="value" >
           </el-calendar>
         </el-main>
       </el-container>

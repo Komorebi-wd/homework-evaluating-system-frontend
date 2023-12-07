@@ -9,7 +9,9 @@ import {ElMessageBox} from "element-plus";
 const courseId = ref(0);
 const courseName = ref('');
 const works= ref([]);
+const loading = ref(false); // 添加一个变量来控制加载状态
 onMounted(() => {
+  loading.value = true; // 开始加载数据时，设置loading为true
   courseId.value = router.currentRoute.value.query.cid;
   courseName.value = router.currentRoute.value.query.cname;
   getClasses()
@@ -105,9 +107,11 @@ function getClasses(){
      showAllHomework(courseId.value)
       .then((data) => {
         works.value = data;
+        loading.value = false; // 数据加载完成后，设置loading为false
         // console.log(data);
       })
       .catch((error) => {
+        loading.value = false; // 数据加载完成后，设置loading为false
       });
 }
 function sortWorksByDate() {
@@ -222,7 +226,12 @@ const goToPage = (cid,thId)  => {
 <!--              </div>-->
 <!--            </div>-->
 <!--          </el-scrollbar>-->
-            <el-table :data="works"  stripe style="width: 100%">
+          <div v-if="loading" style="display: flex; height: 100%; width: 100%;">
+            <p>加载中...</p>
+          </div>
+            <el-table :data="works"  v-loading="loading"  stripe style="width: 100%">
+              <!-- 加载提示 -->
+
               <!-- 日期列 -->
               <el-table-column label="截止日期"  width="250">
                 <template #default="scope">
@@ -252,7 +261,7 @@ const goToPage = (cid,thId)  => {
               </el-table-column>
             </el-table>
 <!--          </div>-->
-          <el-calendar style="width: 600px;height: 550px" class="my-calendar" v-model="value" >
+          <el-calendar style="width: 600px;height: 650px" class="my-calendar" v-model="value" >
           </el-calendar>
 
         </el-main>
