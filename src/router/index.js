@@ -134,11 +134,20 @@ const router = createRouter({
             name: 'detection-detectionDetails',
             component: () => import('@/views/detection/DetectionDetails.vue')
         },
-        // },
         {
             path:'/workPlatform',
             name:'home-workPlatform',
             component:()=>import('@/views/home/WorkPlatform.vue')
+        },
+        {
+            path:'/gradesDetails',
+            name:'grades-gradesDetails',
+            component:()=>import('@/views/Score/GradesDetails.vue')
+        },
+        {
+            path:'/myRecords',
+            name:'myRecords',
+            component:()=>import('@/views/Score/MyRecords.vue')
         }
     ]
 

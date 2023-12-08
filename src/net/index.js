@@ -268,10 +268,24 @@ function showOneHomework(courseId,thId) {
 function getAvgTotalScoresWithCidTid(cid) {
     return new Promise((resolve, reject) => {
         get('/api/teacher/course/'+cid+'/getAllScore', (data) => {
-            console.log("开始查询")
+            //console.log("开始查询")
+            resolve(data);
+            //console.log("查询成功")
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+function getSubmittedAvgScoresWithSidCid(cid){
+    return new Promise((resolve, reject) => {
+        console.log("开始查询已提交作业分数1")
+        get('/api/student/course/'+cid+'/getSubmittedScores', (data) => {
+            console.log("开始查询已提交作业分数2")
             resolve(data);
             console.log("查询成功")
         }, (error) => {
+            console.log("查询失败")
             reject(error);
         });
     });
@@ -492,4 +506,4 @@ export { post, get, login, logout,
     getShWithShId,downloadShWithShId,downloadAllDistributions,
     getAllMarksWithShId,getMyMarksWithCidThId,getMarkWithMid,
     getAllCourses,addScWithSidCid,getAvgTotalScoresWithCidTid,
-    getAvgScoreMarkWithSidThId,getThsWithTidCid}
+    getAvgScoreMarkWithSidThId,getThsWithTidCid,getSubmittedAvgScoresWithSidCid}

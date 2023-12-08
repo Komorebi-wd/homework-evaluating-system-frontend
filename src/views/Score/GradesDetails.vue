@@ -1,14 +1,14 @@
 <script setup>
 import Sider from "@/views/elements/Sider.vue";
-import {Document, Timer} from "@element-plus/icons-vue";
+import {Document} from "@element-plus/icons-vue";
 import router from "@/router";
 import { onMounted, ref} from "vue";
-import {showAllHomework,getAvgTotalScoresWithCidTid, showPersonInfo, changeUsername, changeUserPassword} from "@/net";
+import {showAllHomework, downloadThWithCidThid, showPersonInfo, changeUsername, changeUserPassword,getSubmittedAvgScoresWithSidCid} from "@/net";
 import {ElMessageBox} from "element-plus";
 
 const courseId = ref(0);
 const courseName = ref('');
-const Scores= ref([]);
+const works= ref([]);
 const personInfo = ref([]);
 const dialogVisible = ref(false);
 const cancel = () => {
@@ -19,7 +19,6 @@ function getPersonInfo() {
   showPersonInfo()
       .then((data) => {
         personInfo.value = data;
-        console.log(personInfo.value);
       })
       .catch((error) => {
         console.error(error);
@@ -81,15 +80,6 @@ function changePassword() {
     console.log("取消输入旧密码");
   });
 }
-
-onMounted(() => {
-  //console.log("onMounted")
-  getPersonInfo()
-  courseId.value = router.currentRoute.value.query.cid;
-  courseName.value = router.currentRoute.value.query.cname;
-  getScores()
-});
-
 function userLogout() {
 // 删除 token
   localStorage.removeItem('token'); // 假设 token 存储在 localStorage
@@ -98,27 +88,22 @@ function userLogout() {
   // 路由跳转到首页或登录页
   router.push('/'); // 假设 '/' 是首页或登录页的路由
 }
-
-function getScores(){
-  getAvgTotalScoresWithCidTid(courseId.value)
+function getClasses(){
+  getSubmittedAvgScoresWithSidCid(courseId.value)
       .then((data) => {
-        Scores.value = data;
-         console.log(Scores);
+        works.value = data;
+        console.log(works.value)
       })
       .catch((error) => {
       });
 }
 
-const goToPage = (cid,sid)  => {
-  router.push({
-    path: '/scoreDetails',
-    query: {
-      sid: sid,
-      cid: cid
-    }
-  });
-};
-
+onMounted(() => {
+  getPersonInfo()
+  courseId.value = router.currentRoute.value.query.cid;
+  courseName.value = router.currentRoute.value.query.cname;
+  getClasses()
+});
 </script>
 
 <template>
@@ -132,9 +117,8 @@ const goToPage = (cid,sid)  => {
         <div style="display: flex; justify-content: flex-end; align-items: center;">
           <el-button type="default" @click="cancel">返回</el-button>
           <el-button type="primary" @click="dialogVisible=true">用户中心</el-button>
-          <el-button type="info" @click="userLogout">退出登录</el-button>
+          <el-button type="info" @click="userLogout" >退出登录</el-button>
         </div>
-
       </el-header>
       <el-dialog
           v-model="dialogVisible"
@@ -171,52 +155,32 @@ const goToPage = (cid,sid)  => {
 
         <el-main style="display:flex">
 
-          <!--列表显示速度正常-->
-          <el-table :data="Scores" stripe style="width: 100%">
-            <!-- 学号列 -->
-            <el-table-column label="学号" width="250">
-              <template #default="scope">
-                <div style="display: flex; align-items: center">
-                  <el-icon><Timer /></el-icon>
-                  <span  >{{ scope.row.sid }}</span>
-                </div>
-              </template>
-            </el-table-column>
 
-            <!-- 姓名列 -->
-            <el-table-column label="姓名" width="280">
-              <template #default="scope">
-                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
-                  <el-icon><Document /></el-icon>
-                  <span >{{ scope.row.sname }}</span>
-                </div>
-              </template>
-            </el-table-column>
+          <el-scrollbar max-height="100vh" style="width: 700px;height: 100vh">
+            <div class="scrollbar-demo-item"  style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
+                作业名称
+              </div>
+              <div style="margin-left: auto">
+                作业分数
+              </div>
 
-            <!-- 成绩得分列 -->
-            <el-table-column label="得分" width="280">
-              <template #default="scope">
-                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
-                  <!--                  <el-icon><Document /></el-icon>-->
-                  <span >{{ scope.row.score }}</span>
-                </div>
-              </template>
-            </el-table-column>
+            </div>
 
-            <!-- 详细成绩列 -->
-            <el-table-column label="详细成绩" width="280">
-              <template #default="scope">
-                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
-                  <!--                  <el-icon><Document /></el-icon>-->
-                  <span >
-                     <el-button type="primary" @click="goToPage(courseId,scope.row.sid)">查看详情</el-button>
-                  </span>
-                </div>
-              </template>
-            </el-table-column>
+            <div class="scrollbar-demo-item" v-for="item in works" style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
+                <el-icon><Document /></el-icon>
+                第{{item.thId}}次作业
+              </div>
+              <div style="margin-left: auto">
+                {{item.score}}
+              </div>
+            </div>
+          </el-scrollbar>
 
-          </el-table>
 
+          <el-calendar style="width: 600px;height: 650px" class="my-calendar" v-model="value" >
+          </el-calendar>
         </el-main>
 
       </el-container>
@@ -226,15 +190,10 @@ const goToPage = (cid,sid)  => {
 </template>
 
 <style scoped>
-.dialog-footer button:first-child {
-  margin-left: 20px;
-  margin-right: 10px;
-}
 .scrollbar-demo-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 20px; /* 增加左侧内边距以避免遮挡 */
   height: 50px;
   margin: 10px;
   text-align: center;
