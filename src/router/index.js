@@ -130,9 +130,15 @@ const router = createRouter({
             component:()=>import('@/views/detection/ShowDetectionHomework.vue')
         },
         {
-            path:'/detectionDetails',
-            name:'detection-detectionDetails',
-            component:()=>import('@/views/detection/DetectionDetails.vue')
+            path: '/detectionDetails',
+            name: 'detection-detectionDetails',
+            component: () => import('@/views/detection/DetectionDetails.vue')
+        },
+        // },
+        {
+            path:'/workPlatform',
+            name:'home-workPlatform',
+            component:()=>import('@/views/home/WorkPlatform.vue')
         }
     ]
 

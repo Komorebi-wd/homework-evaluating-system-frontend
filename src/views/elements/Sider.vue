@@ -51,12 +51,12 @@ const goToPage = (path) => {
     </el-menu-item>
 
 
-    <router-link to="/work">
-    <el-menu-item index="4" @click="goToPage('/work')" >
+<!--    <router-link to="/workPlatform">-->
+    <el-menu-item index="4" @click="goToPage('/workPlatform')" >
         <el-icon><document /></el-icon>
          <span>作业平台</span>
     </el-menu-item>
-    </router-link>
+<!--    </router-link>-->
 
     <el-menu-item index="5" @click="goToPage('/evaluatePlatform')">
       <el-icon><setting /></el-icon>
