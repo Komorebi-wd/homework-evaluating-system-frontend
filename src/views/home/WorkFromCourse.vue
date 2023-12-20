@@ -10,6 +10,19 @@ const courseId = ref(0);
 const courseName = ref('');
 const works= ref([]);
 const loading = ref(false); // 添加一个变量来控制加载状态
+// 仍然用于存储所有作业数据
+const allWorks = ref([]);
+
+// 当前显示在表格中的作业数据
+const displayWorks = ref([]);
+
+// 每次加载的数据量
+// const batchSize = 3;
+// 分页状态
+const currentPage = ref(1);
+const pageSize = 5 // 你可以根据需要调整这个值
+const totalItems = ref(0);
+
 onMounted(() => {
   loading.value = true; // 开始加载数据时，设置loading为true
   courseId.value = router.currentRoute.value.query.cid;
@@ -106,14 +119,47 @@ function userLogout() {
 function getClasses(){
      showAllHomework(courseId.value)
       .then((data) => {
-        works.value = data;
-        loading.value = false; // 数据加载完成后，设置loading为false
+        // allWorks.value = data; // 存储所有数据
+        // loadMoreData(); // 加载初始批次的数据
+        // loading.value = false;
+        allWorks.value = data;
+        totalItems.value = data.length;
+        updateDisplayWorks();
+        loading.value = false;
+        // works.value = data;
+        // loading.value = false; // 数据加载完成后，设置loading为false
         // console.log(data);
       })
       .catch((error) => {
         loading.value = false; // 数据加载完成后，设置loading为false
       });
 }
+// function loadMoreData() {
+//   const nextItems = allWorks.value.slice(displayWorks.value.length, displayWorks.value.length + batchSize);
+//   displayWorks.value = [...displayWorks.value, ...nextItems];
+// }
+// 滚动事件处理
+// 滚动事件处理
+function handleScroll(event) {
+  const { scrollTop, clientHeight, scrollHeight } = event.target;
+  // 当滚动接近底部时，加载更多数据
+  if (scrollTop + clientHeight >= scrollHeight - 100) {
+    loadMoreData();
+  }
+}
+// 根据当前页码更新显示的数据
+function updateDisplayWorks() {
+  const start = (currentPage.value - 1) * pageSize;
+  const end = currentPage.value * pageSize;
+  displayWorks.value = allWorks.value.slice(start, end);
+}
+
+// 页码改变时的处理
+function handlePageChange(newPage) {
+  currentPage.value = newPage;
+  updateDisplayWorks();
+}
+
 function sortWorksByDate() {
   new Promise((resolve, reject) => {
     try {
@@ -226,18 +272,22 @@ const goToPage = (cid,thId)  => {
 <!--              </div>-->
 <!--            </div>-->
 <!--          </el-scrollbar>-->
+<!--            </div>-->
           <div v-if="loading" style="display: flex; height: 100%; width: 100%;">
             <p>加载中...</p>
           </div>
-            <el-table :data="works"  v-loading="loading"  stripe style="width: 100%">
+          <div style="height: 700px; width: 1500px; overflow-y: auto;" >
+            <!--表格的高度设置为200px-->
+            <el-table :data="displayWorks"  v-loading="loading" stripe style="width: 100%" >
               <!-- 加载提示 -->
 
               <!-- 日期列 -->
               <el-table-column label="截止日期"  width="250">
                 <template #default="scope">
-                  <div style="display: flex; align-items: center">
+                  <div style="display: flex; align-items: center;height: 75px">
                     <el-icon><Timer /></el-icon>
-                    <span style="margin-left: 10px">{{ scope.row.endTime }}</span>
+                    <span style="margin-left: 10px" >{{ scope.row.endTime }}</span>
+<!--                    <span style="margin-left: 10px">{{ works.row.endTime }}</span>-->
                   </div>
                 </template>
               </el-table-column>
@@ -260,7 +310,17 @@ const goToPage = (cid,thId)  => {
                 </template>
               </el-table-column>
             </el-table>
-<!--          </div>-->
+            <el-pagination
+                @current-change="handlePageChange"
+                :current-page="currentPage"
+                :page-size="pageSize"
+                :total="totalItems"
+                layout="total, prev, pager, next"
+                style="justify-content: center; margin-top: 20px;"
+               >
+            </el-pagination>
+
+          </div>
           <el-calendar style="width: 600px;height: 650px" class="my-calendar" v-model="value" >
           </el-calendar>
 
@@ -273,6 +333,12 @@ const goToPage = (cid,thId)  => {
 </template>
 
 <style scoped>
+/*.el-table .el-table__row {*/
+/*  height: 160px; !* 或者你希望的任何高度 *!*/
+/*}*/
+.row-class-name {
+  height: 160px;
+}
 .scrollbar-demo-item {
   display: flex;
   align-items: center;
@@ -286,6 +352,8 @@ const goToPage = (cid,thId)  => {
   color: var(--el-color-primary);
 }
 .my-calendar {
+  /*left: 50%;*/
+  margin-left: 0px;
   border: 2px solid #ccc;
   border-radius: 2px;
   background-color: lightskyblue;
