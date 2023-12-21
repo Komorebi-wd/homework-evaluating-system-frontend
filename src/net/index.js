@@ -60,12 +60,12 @@ function internalPost(url, data, headers, success, failure, error = defaultError
 function internalGet(url, headers, success, failure, error = defaultError){
     axios.get(url, { headers: headers }).then(({data}) => {
         if(data.code === 200){
-            // console.log("get方法成功")
+            //console.log("成功")
             success(data.data)
         }
 
         else{
-            // console.log("失败")
+            //console.log("失败")
             failure(data.message, data.code, url)
         }
     }).catch(err => error(err))
@@ -294,15 +294,8 @@ function getSubmittedAvgScoresWithSidCid(cid){
 function getAvgScoreMarkWithSidThId(sid,cid,thId) {
     return new Promise((resolve, reject) => {
         get('/api/teacher/course/'+cid+'/tHomework/'+thId%10+'/student/'+sid+'/getScore', (data) => {
-            console.log("开始查询")
-            console.log(sid)
-            console.log(cid)
-            console.log(thId)
-            //console.log("开始查询")
             resolve(data);
-            console.log("查询成功")
         }, (error) => {
-            console.log("查询失败")
             reject(error);
         });
     });
@@ -322,6 +315,54 @@ function getShWithShId(shId) {
         });
     });
 }
+
+
+
+//查询学生在指定课程的所有未回复的申诉
+function getNSuggestionWithCid(cid) {
+    return new Promise((resolve, reject) => {
+        get('/api/student/course/'+cid+'/suggestion/getN', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+
+//查询学生在指定课程的所有已回复的申诉
+function getYSuggestionWithCid(cid) {
+    return new Promise((resolve, reject) => {
+        get('/api/student/course/'+cid+'/suggestion/getY', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+//查询教师在cid课堂中已回复的申诉
+function getTYSuggestionWithCid(cid) {
+    return new Promise((resolve, reject) => {
+        get('/api/teacher/course/'+cid+'/suggestion/getY', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
+//查询教师在cid课堂中未回复的申诉
+function getTNSuggestionWithCid(cid) {
+    return new Promise((resolve, reject) => {
+        get('/api/teacher/course/'+cid+'/suggestion/getN', (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
 
 function showAllUnSubmitHomework() {
     return new Promise((resolve, reject) => {
@@ -433,10 +474,6 @@ function putThWithCidEndDateComment(thId, cid, Date, comment,multipartFile) {
     formData.append('multipartFile', multipartFile);
     console.log("准备发布的作业已封装好")
     console.log(thId);
-    // console.log(cid);
-    // console.log(Date);
-    // console.log(comment);
-    // console.log(multipartFile);
     return new Promise((resolve, reject) => {
         post('/api/teacher/tHomework/upload', formData, (data) => {
             resolve(data);
@@ -452,11 +489,6 @@ function addMarkWithShIdCommentCommentIdScore(shId, comment, score,multipartFile
     formData.append('comment', comment);
     formData.append('score', score);
     formData.append('multipartFile', multipartFile);
-    console.log("准备发布的作业已封装好")
-    console.log(shId);
-    console.log(comment);
-    console.log(score);
-    console.log(multipartFile);
     return new Promise((resolve, reject) => {
         post('/api/student/course/tHomework/sHomework/comment/submit', formData, (data) => {
             resolve(data);
@@ -489,39 +521,32 @@ function submitShWithSidCidThId(cid, thId,comment, multipartFiles) {
     });
 }
 
-/**
- * 获取指定课程的所有教师作业
- * @param {number} cid - 课程ID
- * @returns {Promise} - 返回一个Promise对象，成功时包含作业数据，失败时包含错误信息
- * /course/{cid}/tHomework/getAll
- */
-function getAllTeacherHomeworks(cid) {
+function addSuggestionWithCidQ(cid, question) {
+    const formData = new FormData();
+    formData.append('cid', cid);
+    formData.append('question', question);
     return new Promise((resolve, reject) => {
-        console.log(cid+"进入了getAllTeacherHomeworks方法");
-        console.log("获取指定课程的所有教师作业");
-        get(`/api/teacher/course/`+cid+`/tHomework/getAll`, (data) => {
-            console.log("get方法进去了");
+        post('/api/student/course/suggestion/add', formData, (data) => {
             resolve(data);
         }, (error) => {
             reject(error);
         });
     });
 }
-/**
- * 获取指定课程和教师作业的相似作业信息
- * @param {number} cid - 课程ID
- * @param {number} thId - 教师作业ID
- * @returns {Promise} - 返回一个Promise对象，成功时包含相似作业信息，失败时包含错误信息
- */
-function getSimilarHomeworks(cid, thId) {
+
+function answerSuggestionWithSuggestionIdAnswer(suggestionId, answer) {
+    const formData = new FormData();
+    formData.append('suggestionId', suggestionId);
+    formData.append('answer', answer);
     return new Promise((resolve, reject) => {
-        get(`/api/teacher/course/${cid}/tHomework/${(thId)%10}/compare`, (data) => {
+        post('/api/teacher/course/suggestion/answer', formData, (data) => {
             resolve(data);
         }, (error) => {
             reject(error);
         });
     });
 }
+
 function get(url, success, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure)
 }
@@ -538,4 +563,6 @@ export { post, get, login, logout,
     getShWithShId,downloadShWithShId,downloadAllDistributions,
     getAllMarksWithShId,getMyMarksWithCidThId,getMarkWithMid,
     getAllCourses,addScWithSidCid,getAvgTotalScoresWithCidTid,
-    getAvgScoreMarkWithSidThId,getThsWithTidCid,getSubmittedAvgScoresWithSidCid,getAllTeacherHomeworks,getSimilarHomeworks}
+    getAvgScoreMarkWithSidThId,getThsWithTidCid,getSubmittedAvgScoresWithSidCid,
+    addSuggestionWithCidQ,getNSuggestionWithCid,getYSuggestionWithCid,
+    getTYSuggestionWithCid,getTNSuggestionWithCid,answerSuggestionWithSuggestionIdAnswer}
