@@ -547,6 +547,39 @@ function answerSuggestionWithSuggestionIdAnswer(suggestionId, answer) {
     });
 }
 
+/**
+ * 获取指定课程的所有教师作业
+ * @param {number} cid - 课程ID
+ * @returns {Promise} - 返回一个Promise对象，成功时包含作业数据，失败时包含错误信息
+ * /course/{cid}/tHomework/getAll
+ */
+function getAllTeacherHomeworks(cid) {
+    return new Promise((resolve, reject) => {
+        console.log(cid+"进入了getAllTeacherHomeworks方法");
+        console.log("获取指定课程的所有教师作业");
+        get(`/api/teacher/course/`+cid+`/tHomework/getAll`, (data) => {
+            console.log("get方法进去了");
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+/**
+ * 获取指定课程和教师作业的相似作业信息
+ * @param {number} cid - 课程ID
+ * @param {number} thId - 教师作业ID
+ * @returns {Promise} - 返回一个Promise对象，成功时包含相似作业信息，失败时包含错误信息
+ */
+function getSimilarHomeworks(cid, thId) {
+    return new Promise((resolve, reject) => {
+        get(`/api/teacher/course/${cid}/tHomework/${(thId)%10}/compare`, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
 function get(url, success, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure)
 }
@@ -565,4 +598,4 @@ export { post, get, login, logout,
     getAllCourses,addScWithSidCid,getAvgTotalScoresWithCidTid,
     getAvgScoreMarkWithSidThId,getThsWithTidCid,getSubmittedAvgScoresWithSidCid,
     addSuggestionWithCidQ,getNSuggestionWithCid,getYSuggestionWithCid,
-    getTYSuggestionWithCid,getTNSuggestionWithCid,answerSuggestionWithSuggestionIdAnswer}
+    getTYSuggestionWithCid,getTNSuggestionWithCid,answerSuggestionWithSuggestionIdAnswer,getAllTeacherHomeworks,getSimilarHomeworks};
