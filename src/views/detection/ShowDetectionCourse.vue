@@ -17,7 +17,7 @@
             <div class="scrollbar-demo-item" v-for="item in classes" :key="item.id">
               <el-icon><House /></el-icon>
               {{item.cname}}
-              <el-button type="primary" style="margin-left: auto"  @click="goToPage(item.cid,item.cname)" >查看所有提交作业</el-button>
+              <el-button type="primary" style="margin-left: auto"  @click="goToPage(item.cid,item.cname)" >查看所有布置作业</el-button>
             </div>
 
           </el-scrollbar>

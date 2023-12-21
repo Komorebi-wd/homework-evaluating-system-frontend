@@ -63,6 +63,7 @@ const goToPage = (path) => {
       <span>批改平台</span>
     </el-menu-item>
 
+
     <el-menu-item index="6" @click="goToPage('/showCourse')">
       <el-icon><Star /></el-icon>
       <span>成绩统计</span>

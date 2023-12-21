@@ -60,12 +60,12 @@ function internalPost(url, data, headers, success, failure, error = defaultError
 function internalGet(url, headers, success, failure, error = defaultError){
     axios.get(url, { headers: headers }).then(({data}) => {
         if(data.code === 200){
-            //console.log("成功")
+            // console.log("get方法成功")
             success(data.data)
         }
 
         else{
-            //console.log("失败")
+            // console.log("失败")
             failure(data.message, data.code, url)
         }
     }).catch(err => error(err))
@@ -489,7 +489,39 @@ function submitShWithSidCidThId(cid, thId,comment, multipartFiles) {
     });
 }
 
-
+/**
+ * 获取指定课程的所有教师作业
+ * @param {number} cid - 课程ID
+ * @returns {Promise} - 返回一个Promise对象，成功时包含作业数据，失败时包含错误信息
+ * /course/{cid}/tHomework/getAll
+ */
+function getAllTeacherHomeworks(cid) {
+    return new Promise((resolve, reject) => {
+        console.log(cid+"进入了getAllTeacherHomeworks方法");
+        console.log("获取指定课程的所有教师作业");
+        get(`/api/teacher/course/`+cid+`/tHomework/getAll`, (data) => {
+            console.log("get方法进去了");
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+/**
+ * 获取指定课程和教师作业的相似作业信息
+ * @param {number} cid - 课程ID
+ * @param {number} thId - 教师作业ID
+ * @returns {Promise} - 返回一个Promise对象，成功时包含相似作业信息，失败时包含错误信息
+ */
+function getSimilarHomeworks(cid, thId) {
+    return new Promise((resolve, reject) => {
+        get(`/api/teacher/course/${cid}/tHomework/${(thId)%10}/compare`, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
 function get(url, success, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure)
 }
@@ -506,4 +538,4 @@ export { post, get, login, logout,
     getShWithShId,downloadShWithShId,downloadAllDistributions,
     getAllMarksWithShId,getMyMarksWithCidThId,getMarkWithMid,
     getAllCourses,addScWithSidCid,getAvgTotalScoresWithCidTid,
-    getAvgScoreMarkWithSidThId,getThsWithTidCid,getSubmittedAvgScoresWithSidCid}
+    getAvgScoreMarkWithSidThId,getThsWithTidCid,getSubmittedAvgScoresWithSidCid,getAllTeacherHomeworks,getSimilarHomeworks}
