@@ -293,7 +293,7 @@ function getSubmittedAvgScoresWithSidCid(cid){
 
 function getAvgScoreMarkWithSidThId(sid,cid,thId) {
     return new Promise((resolve, reject) => {
-        get('/api/teacher/course/'+cid+'/tHomework/'+thId%10+'/student/'+sid+'/getScore', (data) => {
+        get('/api/teacher/course/'+cid+'/tHomework/'+thId+'/student/'+sid+'/getScore', (data) => {
             resolve(data);
         }, (error) => {
             reject(error);
@@ -580,6 +580,52 @@ function getSimilarHomeworks(cid, thId) {
         });
     });
 }
+
+/**
+ * 修改指定学生在特定课程和作业下的分数
+ * @param {number} cid - 课程ID
+ * @param {number} thId - 教师作业ID
+ * @param {string} sid - 学生ID
+ * @param {number} newScore - 新分数
+ * @returns {Promise} - 返回一个Promise对象，成功时包含修改成功的信息，失败时包含错误信息
+ */
+function changeStudentScore(cid, thId, sid, newScore) {
+    console.log("进入了changeStudentScore方法");
+    console.log("参数分别是"+cid, thId, sid, newScore);
+    return new Promise((resolve, reject) => {
+        post(`/api/teacher/course/${cid}/tHomework/${(thId)%10}/student/${sid}/changeScore/${newScore}`, {}, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+/**
+ * 下载学生的作业
+ * @param {number} cid - 课程ID
+ * @param {string} sid - 学生ID
+ * @param {number} thId - 第x次作业ID
+ */
+function downloadStudentHomework(cid, sid, thId) {
+    return new Promise((resolve, reject) => {
+        const url = `/api/teacher/course/${cid}/tHomework/${(thId)%10}/sHomework/student/${sid}/download`;
+        getForDownload(url, (response) => {
+            const contentDisposition = response.headers['content-disposition'];
+            const filename = getFilenameFromContentDisposition(contentDisposition) || `homework-${cid}-${thId}.ext`;
+            const blobUrl = window.URL.createObjectURL(response.data);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename; // 使用后端提供的文件名
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(blobUrl);
+            resolve('Download successful');
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
 function get(url, success, failure = defaultFailure) {
     internalGet(url, accessHeader(), success, failure)
 }
@@ -598,4 +644,4 @@ export { post, get, login, logout,
     getAllCourses,addScWithSidCid,getAvgTotalScoresWithCidTid,
     getAvgScoreMarkWithSidThId,getThsWithTidCid,getSubmittedAvgScoresWithSidCid,
     addSuggestionWithCidQ,getNSuggestionWithCid,getYSuggestionWithCid,
-    getTYSuggestionWithCid,getTNSuggestionWithCid,answerSuggestionWithSuggestionIdAnswer,getAllTeacherHomeworks,getSimilarHomeworks};
+    getTYSuggestionWithCid,getTNSuggestionWithCid,answerSuggestionWithSuggestionIdAnswer,getAllTeacherHomeworks,getSimilarHomeworks,changeStudentScore,downloadStudentHomework};
