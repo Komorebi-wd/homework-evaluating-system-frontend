@@ -148,6 +148,46 @@ const router = createRouter({
             path:'/myRecords',
             name:'myRecords',
             component:()=>import('@/views/Score/MyRecords.vue')
+        },
+        {
+            path:'/appeal',
+            name:'my-appeal',
+            component:()=>import('@/views/appeal/Appeal.vue')
+        },
+        {
+            path:'/addAppeal',
+            name:'my-addAppeal',
+            component:()=>import('@/views/appeal/AddAppeal.vue')
+        },
+        {
+            path:'/unAnsweredAppeal',
+            name:'teacher-unAnsweredAppeal',
+            component:()=>import('@/views/appeal/UnAnsweredAppeal.vue')
+        },
+        {
+            path:'/answeredAppeal',
+            name:'teacher-answeredAppeal',
+            component:()=>import('@/views/appeal/AnsweredAppeal.vue')
+        },
+        {
+            path:'/teacherAppeal',
+            name:'teacher-teacherAppeal',
+            component:()=>import('@/views/appeal/TeacherAppeal.vue')
+        },
+        {
+            path:'/teacherAnsweredAppeal',
+            name:'teacher-teacherAnsweredAppeal',
+            component:()=>import('@/views/appeal/TeacherAnsweredAppeal.vue')
+        },
+        {
+            path:'/teacherUnAnsweredAppeal',
+            name:'teacher-teacherUnAnsweredAppeal',
+            component:()=>import('@/views/appeal/TeacherUnansweredAppeal.vue')
+        },
+        {
+            path:'/teacherAddAnswerAppeal',
+            name:'teacher-teacherAddAnswerAppeal',
+            component:()=>import('@/views/appeal/TeacherAddAnswerAppeal.vue')
         }
     ]
 
