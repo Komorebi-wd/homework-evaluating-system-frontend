@@ -99,7 +99,7 @@ const goToPage = (cid,thId,cname)  => {
             </el-table-column>
 
             <!-- 文件名列 -->
-            <el-table-column label="文件名" width="380">
+            <el-table-column label="文件名" width="240">
               <template #default="scope">
                 <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%;">
                   <el-icon><Document /></el-icon>

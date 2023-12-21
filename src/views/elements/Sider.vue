@@ -6,18 +6,29 @@ import {
   Setting, Star, Avatar, Box, Search,
 } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router';
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
+import {showPersonInfo} from "@/net";
 const router = useRouter();
+const personInfo = ref([]);
 const selectedItem = ref('1'); // 默认选中第一个菜单项
 const goToPage = (path) => {
-  //selectedItem.value = index; // 更新选中的菜单项
-  //defaultActive.value = index;
   router.push(path).then(() => {
-    //selectedItem.value = index; // 在页面成功跳转后更新选中的菜单项
-    //defaultActive.value = index;
-  //default-active="1"
   });
 }
+
+function getPersonInfo() {
+  showPersonInfo()
+      .then((data) => {
+        personInfo.value = data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+}
+onMounted(() => {
+  getPersonInfo()
+});
+
 </script>
 
 <template>
@@ -39,42 +50,42 @@ const goToPage = (path) => {
     </router-link>
 
     <router-link to="/course">
-    <el-menu-item index="2" >
+    <el-menu-item index="2" v-if="personInfo.role==='student'">
       <el-icon><icon-menu /></el-icon>
       <span>课程平台</span>
     </el-menu-item>
     </router-link>
 
-    <el-menu-item index="3" @click="goToPage('/allClass')">
+    <el-menu-item index="3" @click="goToPage('/allClass') " v-if="personInfo.role==='student'">
       <el-icon><Box /></el-icon>
       <span>选课管理</span>
     </el-menu-item>
 
 
 <!--    <router-link to="/workPlatform">-->
-    <el-menu-item index="4" @click="goToPage('/workPlatform')" >
+    <el-menu-item index="4" @click="goToPage('/workPlatform')" v-if="personInfo.role==='student'" >
         <el-icon><document /></el-icon>
          <span>作业平台</span>
     </el-menu-item>
 <!--    </router-link>-->
 
-    <el-menu-item index="5" @click="goToPage('/evaluatePlatform')">
+    <el-menu-item index="5" @click="goToPage('/evaluatePlatform')" v-if="personInfo.role==='student'">
       <el-icon><setting /></el-icon>
       <span>批改平台</span>
     </el-menu-item>
 
 
-    <el-menu-item index="6" @click="goToPage('/showCourse')">
+    <el-menu-item index="6" @click="goToPage('/showCourse')" v-if="personInfo.role==='teacher'">
       <el-icon><Star /></el-icon>
       <span>成绩统计</span>
     </el-menu-item>
 
-    <el-menu-item index="7" @click="goToPage('/teachCourse')">
+    <el-menu-item index="7" @click="goToPage('/teachCourse')" v-if="personInfo.role==='teacher'">
       <el-icon><Avatar /></el-icon>
       <span>教学平台</span>
     </el-menu-item>
 
-    <el-menu-item index="8" @click="goToPage('/showDetectionCourse')">
+    <el-menu-item index="8" @click="goToPage('/showDetectionCourse')" v-if="personInfo.role==='teacher'">
       <el-icon><Search /></el-icon>
       <span>作业查重</span>
     </el-menu-item>

@@ -17,7 +17,10 @@
             <div class="scrollbar-demo-item" v-for="item in classes" :key="item.id">
               <el-icon><House /></el-icon>
               {{item.cname}}
-              <el-button type="primary" style="margin-left: auto"  @click="goToPage(item.cid,item.cname)" >查看成绩</el-button>
+              <div style="margin-left: auto">
+                <el-button type="primary"    @click="goToPage(item.cid,item.cname)" >查看成绩</el-button>
+                <el-button type="success"    @click="open(item.cid)">加分鼓励</el-button>
+              </div>
             </div>
 
           </el-scrollbar>
@@ -35,16 +38,30 @@ import Header from "@/views/elements/Header.vue";
 import Sider from "@/views/elements/Sider.vue";
 import {onMounted, ref} from 'vue'
 import {House} from "@element-plus/icons-vue";
-import {getAllCoursesByTid} from "@/net";
+import {getAllCoursesByTid,addScoreForTopNStudentWithCidAddScoreNum} from "@/net";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 // 定义响应式变量来保存课程列表
 const classes = ref([]);
+const score = ref(0);
+const n = ref(0);
 
 function getClasses(){
   getAllCoursesByTid()
       .then((data) => {
         classes.value = data;
         //console.log(data)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+}
+
+function addScore(cid){
+  addScoreForTopNStudentWithCidAddScoreNum(cid,score.value,n.value)
+      .then((data) => {
+        console.log(data)
+        ElMessage.success("加分成功")
       })
       .catch((error) => {
         console.error(error);
@@ -64,6 +81,46 @@ const goToPage = (cid,cname)  => {
     }
   });
 };
+
+
+const open = (cid) => {
+  // 首先输入分数
+  ElMessageBox.prompt('请输入分数', '输入', {
+    confirmButtonText: '下一步',
+    cancelButtonText: '取消',
+    inputValidator: (value) => {
+      return !isNaN(value) && value !== '';
+    },
+    inputErrorMessage: '无效的分数'
+  })
+      .then(({ value }) => {
+        score.value = Number(value);
+
+        // 接着输入人数
+        return ElMessageBox.prompt('请输入人数', '输入', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputValidator: (value) => {
+            return !isNaN(value) && value !== '';
+          },
+          inputErrorMessage: '无效的人数'
+        });
+      })
+      .then(({ value }) => {
+        n.value = Number(value);
+        addScore(cid)
+        ElMessage({
+          type: 'success',
+          message: `您选择的加分是: ${score.value}, 人数是: ${n.value}`
+        });
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '输入取消'
+        });
+      });
+}
 
 
 </script>

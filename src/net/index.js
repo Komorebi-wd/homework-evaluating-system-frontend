@@ -534,6 +534,21 @@ function addSuggestionWithCidQ(cid, question) {
     });
 }
 
+function addScoreForTopNStudentWithCidAddScoreNum(cid, addScore, n) {
+    const formData = new FormData();
+    formData.append('cid', cid);
+    formData.append('addScore', addScore);
+    formData.append('n', n);
+    console.log(cid, addScore, n)
+    return new Promise((resolve, reject) => {
+        post('/api/teacher/course/score/addScore', formData, (data) => {
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
 function answerSuggestionWithSuggestionIdAnswer(suggestionId, answer) {
     const formData = new FormData();
     formData.append('suggestionId', suggestionId);
@@ -644,4 +659,6 @@ export { post, get, login, logout,
     getAllCourses,addScWithSidCid,getAvgTotalScoresWithCidTid,
     getAvgScoreMarkWithSidThId,getThsWithTidCid,getSubmittedAvgScoresWithSidCid,
     addSuggestionWithCidQ,getNSuggestionWithCid,getYSuggestionWithCid,
-    getTYSuggestionWithCid,getTNSuggestionWithCid,answerSuggestionWithSuggestionIdAnswer,getAllTeacherHomeworks,getSimilarHomeworks,changeStudentScore,downloadStudentHomework};
+    getTYSuggestionWithCid,getTNSuggestionWithCid,answerSuggestionWithSuggestionIdAnswer,
+    getAllTeacherHomeworks,getSimilarHomeworks,changeStudentScore,downloadStudentHomework,
+    addScoreForTopNStudentWithCidAddScoreNum}

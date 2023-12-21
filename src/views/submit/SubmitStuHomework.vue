@@ -120,25 +120,6 @@ function determineFileType(blob) {
   return blob.type;
 }
 
-
-//提交作业函数
-// function submit() {
-//   const file=ref([]) as any;
-//   for (let i = 0; i < fileList2.value.length; i++) {
-//     file.value[i] = fileList2.value[i].raw;
-//     console.log(file.value);
-//   }
-//
-//   submitShWithSidCidThId(courseId.value, thId.value, file)
-//       .then((message) => {
-//         console.log("提交成功", message);
-//         // 这里处理提交成功后的逻辑
-//       })
-//       .catch((error) => {
-//         console.error("提交失败", error);
-//         // 这里处理提交失败的逻辑
-//       });
-// }
 function submit() {
   const files = []; // 创建一个数组来存储文件
   for (let i = 0; i < fileList1.value.length; i++) {
@@ -149,24 +130,22 @@ function submit() {
     files.push(fileList2.value[i].raw); // 将文件添加到数组中
   }
 
+  if (files.length === 0) {
+    ElMessage.error("请至少上传一个作业文件");
+    return;
+  }
+
   submitShWithSidCidThId(courseId.value, thId.value, comment.value,files)
       .then((message) => {
         ElMessage.success("提交作业成功")
-        //console.log("提交成功", message);
-        // 这里处理提交成功后的逻辑
+        router.go(-1); // 后退到上一个页面
       })
       .catch((error) => {
         ElMessage.error("提交作业失败")
-        //console.error("提交失败", error);
-        // 这里处理提交失败的逻辑
       });
 }
 
 
-
-const setScore = (num) => {
-  // 设置评分逻辑
-};
 const cancel = () => {
   router.go(-1); // 后退到上一个页面
 };
@@ -265,7 +244,7 @@ const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
                       </el-upload>
 
                     </div>
-                    <el-button type="default" @click="empty">清空</el-button>
+                    <el-button type="success" @click="empty">清空</el-button>
                   </div>
                 </div>
               </div>
@@ -275,7 +254,7 @@ const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
 
           <div class="action-buttons">
             <!-- 取消和提交按钮 -->
-            <el-button type="default" @click="cancel">取消</el-button>
+            <el-button type="success" @click="cancel">取消</el-button>
             <el-button type="primary" @click="submit()">提交</el-button>
           </div>
         </div>

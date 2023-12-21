@@ -17,6 +17,7 @@
                       v-model="textarea"
                       :rows="20"
                       type="textarea"
+                      clearable
                       placeholder="请输入申诉理由："
             />
             <div >
@@ -24,8 +25,6 @@
               <el-button type="success" @click="submitCancel">取消申诉</el-button>
             </div>
           </div>
-
-
 
           <el-calendar style="width: 600px;height: 650px" class="my-calendar" v-model="value" />
         </el-main>
@@ -61,6 +60,10 @@ onMounted(() => {
 })
 
 const submitAppeal = () => {
+  if (textarea.value === '') {
+    ElMessage.error("申诉理由不能为空")
+    return
+  }
   addSuggestionWithCidQ(cid.value,textarea.value)
       .then((data) => {
         console.log(data)
@@ -69,6 +72,10 @@ const submitAppeal = () => {
       .catch((error) => {
         console.error(error);
       });
+}
+
+const submitCancel = () => {
+  goToPage('/course')
 }
 
 </script>
