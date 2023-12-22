@@ -19,6 +19,22 @@ onMounted(() => {
 
 const onSubmit = () => {
   //console.log(form)
+  if (form.comment === '') {
+    ElMessage.error("作业注意事项不能为空")
+    return
+  }
+  if (form.date === '') {
+    ElMessage.error("提交截止日期不能为空")
+    return
+  }
+  if(form.date < new Date().toISOString().slice(0, 10)){
+    ElMessage.error("提交截止日期不能小于当前日期")
+    return
+  }
+  if (fileList.value.length === 0) {
+    ElMessage.error("作业文件不能为空")
+    return
+  }
   let file = fileList.value[0].raw
   putThWithCidEndDateComment(num.value,courseId.value,form.date,form.comment,file)
       .then((message) => {
