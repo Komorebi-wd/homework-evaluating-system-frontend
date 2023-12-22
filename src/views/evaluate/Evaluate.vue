@@ -127,15 +127,25 @@ const handleChange = (value: number) => {
   console.log(value)
 }
 const submit = () => {
+  if (fileList.value.length === 0) {
+    ElMessage.error("请上传批改文件");
+    return;
+  }
   let file = fileList.value[0].raw;
+  if (comment.value === '') {
+    ElMessage.error("批改意见不能为空");
+    return;
+  }
+  if (score.value === '' || score.value === 0 || score.value < 0 || score.value > 100) {
+    ElMessage.error("批改分数无效");
+    return;
+  }
   addMarkWithShIdCommentCommentIdScore(shId.value, comment.value, score.value, file)
       .then((message) => {
-        console.log("提交成功", message);
-
         // 显示成功消息
         ElMessage.success({
           message: "提交批改成功",
-          duration: 1000 // 这里设置消息显示的时间为3000毫秒（3秒）
+          duration: 1000 // 这里设置消息显示的时间为1000毫秒（1秒）
         });
 
         // 设置一个与消息显示时间匹配的延时，然后跳转回上一级
@@ -145,7 +155,6 @@ const submit = () => {
 
       })
       .catch((error) => {
-        console.error("提交失败", error);
         ElMessage.error("提交批改失败");
         // 这里处理提交失败的逻辑
       });
@@ -219,7 +228,7 @@ const setScore = (num) => {
                       </el-upload>
 
                     </div>
-                    <el-button type="default" @click="empty">清空</el-button>
+                    <el-button type="success" @click="empty">清空</el-button>
                   </div>
                 </div>
               </div>
@@ -229,8 +238,8 @@ const setScore = (num) => {
 
           <div class="action-buttons">
             <!-- 取消和提交按钮 -->
-            <el-button type="default" @click="cancel" >取消</el-button>
-            <el-button type="primary" @click="submit()">提交</el-button>
+            <el-button type="success" @click="cancel" >取消</el-button>
+            <el-button type="primary" @click="submit">提交</el-button>
           </div>
         </div>
 
