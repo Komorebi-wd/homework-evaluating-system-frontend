@@ -97,10 +97,16 @@ const buttons = [
   { type: 'info', text: 'info' },
 ] as const
 const homes=[
+
   {url:'src/resources/home1.png', text:'Image 1'},
   {url:'src/resources/home2.png', text:'Image 2'},
   {url:'src/resources/home3.png', text:'Image 3'},
   {url:'src/resources/home4.png', text:'Image 4'},
+  {url:'src/resources/advertisement.jpg', text:'Image 5'},
+  {url:'src/resources/ywd.jpg', text:'Image 6'},
+
+  {url:'src/resources/wjw.jpg', text:'Image 7'},
+  {url:'src/resources/xzc.jpg', text:'Image 8'}
 ]
 const goToPage = (path)  => {
   router.push(path);

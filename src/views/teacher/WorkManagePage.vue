@@ -27,7 +27,7 @@ const onSubmit = () => {
     ElMessage.error("提交截止日期不能为空")
     return
   }
-  if(form.date < new Date().toISOString().slice(0, 10)){
+  if(form.date < new Date()){
     ElMessage.error("提交截止日期不能小于当前日期")
     return
   }
