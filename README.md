@@ -1,6 +1,7 @@
 # my-project-frontend
 
 This template should help get you started developing with Vue 3 in Vite.
+这是同伴作业互评系统的前端
 
 ## Recommended IDE Setup
 
